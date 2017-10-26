@@ -1,0 +1,16 @@
+{
+	"name": "ls",
+	"version": "1.0.0",
+	"description": "projet base de données noSQL",
+	"main": "app/app.js",
+	"scripts": {
+		"test": "execute"
+	},
+	"author": "daniel",
+	"license": "ISC",
+	"dependencies": {
+		"mongodb": "^2.2.33",
+		"xhr2": "^0.1.4",
+		"xmlhttprequest": "^1.8.0"
+	}
+}
