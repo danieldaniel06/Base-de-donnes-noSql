@@ -1,4 +1,6 @@
-var MongoClient = require('mongodb').MongoClient,
+{
+	"knownSymbols": {}
+}var MongoClient = require('mongodb').MongoClient,
 	assert = require('assert');
 
 // Connection URL
