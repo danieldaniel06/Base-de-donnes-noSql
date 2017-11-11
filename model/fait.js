@@ -191,3 +191,30 @@ module.exports.getFaitActiviteGroupByInstActivite = function(callback, year) {
 	}
 	FaiActivite.aggregate(query).exec(callback);
 };
+
+module.exports.getTotatGroupActInst = function(callback, year) {
+	query = [
+		{
+			$match: { 'idDate.year': parseInt(year) }
+		},
+		{
+			$group: {
+				_id: null,
+				sumNbParticipantsHomme: {
+					$sum: '$nbParticipantsHomme'
+				},
+				sumNbParticipantsFemme: {
+					$sum: '$nbParticipantsFemme'
+				},
+				sumNbParticipantsHommeMineur: {
+					$sum: '$nbParticipantsHommeMineur'
+				},
+				sumNbParticipantsFemmeMineur: {
+					$sum: '$nbParticipantsFemmeMineur'
+				}
+			}
+		}
+	];
+
+	FaiActivite.aggregate(query).exec(callback);
+};

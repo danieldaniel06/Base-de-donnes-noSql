@@ -40,16 +40,25 @@ class FaitActivite extends React.Component {
 		});
 	};
 
+	getTotal = function(year) {
+		var url = 'http://localhost:3000/api/fait_activites/total/' + year;
+		Request.get(url).then(res => {
+			this.setState({ totalActiviteInst: [JSON.parse(res.text)] });
+		});
+	};
+
 	componentDidMount() {
 		this.getGroupByInst(2005);
 		this.getGroupByActivite(2005);
 		this.getGroupByActiviteInst(2005);
+		this.getTotal(2005);
 	}
 
 	refresh = function(year) {
-    this.getGroupByActiviteInst(year);
+		this.getGroupByActiviteInst(year);
 		this.getGroupByInst(year);
 		this.getGroupByActivite(year);
+		this.getTotal(year);
 	};
 
 	componentWillUnmount() {}
@@ -97,103 +106,53 @@ class FaitActivite extends React.Component {
 			var i = 0;
 			var cle;
 			var activitesC = _.map(this.state.faitActiviteGroupByActInst, activite => {
-				cle = activite._id;
+				cle = this.state.faitActiviteGroupByActInst[i]._id.nomInstallation
+					? this.state.faitActiviteGroupByActInst[i]._id.nomInstallation.replace(/ /g, '')
+					: 'undefined';
+
 				var insert = <tr />;
 
+				var act = this.state.transform.get(cle);
 				if (i < this.state.faitActiviteGroupByActInst.length - 1) {
-					if (
-						this.state.faitActiviteGroupByActInst[i + 1]._id.nomInstallation !=
-						this.state.faitActiviteGroupByActInst[i]._id.nomInstallation
-					) {
-						if (this.state.faitActiviteGroupByActInst[i]._id.nomInstallation) {
-							var act = this.state.transform.get(
-								this.state.faitActiviteGroupByActInst[i]._id.nomInstallation.replace(/ /g, '')
-							);
-							if (act) {
-								insert = (
-									<tr className="total">
-										<td>
-											{act._id.nomInstallation}
-										</td>
-										<td>
-											{act._id.nomActivite}
-										</td>
-										<td>
-											{act.sumNbParticipantsHomme}
-										</td>
-										<td>
-											{act.sumNbParticipantsFemme}
-										</td>
-									</tr>
-								);
-							}
-						}else{
-              var act = this.state.transform.get('undefined');
-              insert = (
-                <tr className="total">
-                  <td>
-                    {act._id.nomInstallation}
-                  </td>
-                  <td>
-                    {act._id.nomActivite}
-                  </td>
-                  <td>
-                    {act.sumNbParticipantsHomme}
-                  </td>
-                  <td>
-                    {act.sumNbParticipantsFemme}
-                  </td>
-                </tr>
-              );
-            }
-						//console.log(insert);
+					var cleSuv = this.state.faitActiviteGroupByActInst[i + 1]._id.nomInstallation
+						? this.state.faitActiviteGroupByActInst[i + 1]._id.nomInstallation.replace(/ /g, '')
+						: 'undefined';
+					if (cleSuv != cle) {
+						insert = (
+							<tr className="total">
+								<td>
+									{act._id.nomInstallation}
+								</td>
+								<td>
+									{act._id.nomActivite}
+								</td>
+								<td>
+									{act.sumNbParticipantsHomme}
+								</td>
+								<td>
+									{act.sumNbParticipantsFemme}
+								</td>
+							</tr>
+						);
 					}
-				}else{
-          if (this.state.faitActiviteGroupByActInst[i]._id.nomInstallation) {
-            var act = this.state.transform.get(
-              this.state.faitActiviteGroupByActInst[i]._id.nomInstallation.replace(/ /g, '')
-            );
-            if (act) {
-              insert = (
-                <tr className="total">
-                  <td>
-                    {act._id.nomInstallation}
-                  </td>
-                  <td>
-                    {act._id.nomActivite}
-                  </td>
-                  <td>
-                    {act.sumNbParticipantsHomme}
-                  </td>
-                  <td>
-                    {act.sumNbParticipantsFemme}
-                  </td>
-                </tr>
-              );
-            }
-          }else{
-            var act = this.state.transform.get('undefined');
-            insert = (
-              <tr className="total">
-                <td>
-                  {act._id.nomInstallation}
-                </td>
-                <td>
-                  {act._id.nomActivite}
-                </td>
-                <td>
-                  {act.sumNbParticipantsHomme}
-                </td>
-                <td>
-                  {act.sumNbParticipantsFemme}
-                </td>
-              </tr>
-            );
-          }
-          //console.log(insert);
-        }
-        
-
+				} else {
+					insert = (
+						<tr className="total">
+							<td>
+								{act._id.nomInstallation}
+							</td>
+							<td>
+								{act._id.nomActivite}
+							</td>
+							<td>
+								{act.sumNbParticipantsHomme}
+							</td>
+							<td>
+								{act.sumNbParticipantsFemme}
+							</td>
+						</tr>
+					);
+				}
 				i++;
 				return [
 					<tr>
@@ -212,6 +171,22 @@ class FaitActivite extends React.Component {
 					</tr>,
 					insert
 				];
+			});
+
+			var activitesTot = _.map(this.state.totalActiviteInst, total => {
+				console.log(total);
+				return (
+					<tr>
+						<td>null</td>
+						<td>null</td>
+						<td>
+							{total.sumNbParticipantsHomme}
+						</td>
+						<td>
+							{total.sumNbParticipantsFemme}
+						</td>
+					</tr>
+				);
 			});
 		}
 
@@ -232,9 +207,9 @@ class FaitActivite extends React.Component {
 							<th>Total homme participant</th>
 							<th>Total Femme participant</th>
 						</tr>
-
 						{activitesC}
 						{activitesB}
+						{activitesTot}
 					</tbody>
 				</table>
 			</div>

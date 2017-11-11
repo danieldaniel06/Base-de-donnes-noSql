@@ -97,5 +97,14 @@ app.get('/api/fait_activites/groupInstAct/:year', function(req, res) {
 	}, req.params.year);
 });
 
+app.get('/api/fait_activites/total/:year', function(req, res) {
+	FaitActivite.getTotatGroupActInst(function(err, fait) {
+		if (err) {
+			throw err;
+		}
+		res.json(fait);
+	}, req.params.year);
+});
+
 app.listen(3000);
 console.log('Running on port 3000...');
