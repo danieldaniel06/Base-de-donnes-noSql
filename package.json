@@ -9,6 +9,9 @@
 	"author": "daniel",
 	"license": "ISC",
 	"dependencies": {
+		"express": "*",
+		"body-parser": "*",
+		"mongoose": "*",
 		"mongodb": "^2.2.33",
 		"xhr2": "^0.1.4",
 		"xmlhttprequest": "^1.8.0"
