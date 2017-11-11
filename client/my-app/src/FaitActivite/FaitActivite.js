@@ -176,7 +176,7 @@ class FaitActivite extends React.Component {
 			var activitesTot = _.map(this.state.totalActiviteInst, total => {
 				console.log(total);
 				return (
-					<tr>
+					<tr className="sumTotal">
 						<td>null</td>
 						<td>null</td>
 						<td>
