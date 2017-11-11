@@ -263,3 +263,29 @@ db.fait_activites.aggregate([
 		}
 	}
 ]);
+
+/**
+ * Somme de
+ */
+db.fait_activites.aggregate([
+	{
+		$match: { 'idDate.year': 2005 }
+	},
+	{
+		$group: {
+			_id: null,
+			sumNbParticipantsHomme: {
+				$sum: '$nbParticipantsHomme'
+			},
+			sumNbParticipantsFemme: {
+				$sum: '$nbParticipantsFemme'
+			},
+			sumNbParticipantsHommeMineur: {
+				$sum: '$nbParticipantsHommeMineur'
+			},
+			sumNbParticipantsFemmeMineur: {
+				$sum: '$nbParticipantsFemmeMineur'
+			}
+		}
+	}
+]);

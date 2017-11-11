@@ -1,13 +1,17 @@
-var installation_file = '/Users/danielahmed/Desktop/jsonFiles/installations.json';
+var installation_file = require('../jsonFiles/installation.json');
 var installation_file_write = '/Users/danielahmed/Desktop/jsonFiles/installations_w.json';
 
 var equipement_file = '/Users/danielahmed/Desktop/jsonFiles/equipements.json';
 var equipement_file_write = '/Users/danielahmed/Desktop/jsonFiles/equipements_w.json';
 
-var activite_file = '/Users/danielahmed/Desktop/jsonFiles/activites.json';
+var equipement_file_bis = require('../jsonFiles/equipements.json');
+
+var activite_file = require('../jsonFiles/activites.json');
 var activite_file_write = '/Users/danielahmed/Desktop/jsonFiles/activites_w.json';
 
-var addresses_file = '/Users/danielahmed/Desktop/jsonFiles/FichierJson/addresses.json';
+var addresses_file = require('../jsonFiles/addresses.json');
+
+//console.log(installation_file.installations);
 
 readFile = function(file) {
 	var fs = require('fs');
@@ -20,16 +24,16 @@ writeFile = function(file, data) {
 	fs.writeFileSync(file, data);
 };
 
-var dataI = JSON.parse(readFile(installation_file));
-//writeFile(installation_file_write, JSON.stringify(dataI.installations));
+//var installation_file = JSON.parse(readFile(installation_file));
+//writeFile(installation_file_write, JSON.stringify(installation_file.installations));
 
 var dataE = JSON.parse(readFile(equipement_file));
 //writeFile(equipement_file_write, JSON.stringify(dataE.equipements));
 
-var dataA = JSON.parse(readFile(activite_file));
-//writeFile(activite_file_write, JSON.stringify(dataA.activites));
+//var activite_file = JSON.parse(readFile(activite_file));
+//writeFile(activite_file_write, JSON.stringify(activite_file.activites));
 
-var dataAddr = JSON.parse(readFile(addresses_file));
+//var activite_fileddr = JSON.parse(readFile(addresses_file));
 
 var daysOfYear = [];
 var dateInit = new Date(2005, 7, 28, 0, 0, 0);
@@ -57,31 +61,45 @@ var randAct;
 
 var keyInst = [];
 
-for (var i = 0; i < dataI.installations.length; i++) {
-	if (dataI.installations[i].idInstallation) {
-		keyInst[dataI.installations[i].idInstallation] = dataI.installations[i];
+for (var i = 0; i < installation_file.installations.length; i++) {
+	if (installation_file.installations[i]._id) {
+		keyInst[installation_file.installations[i]._id] = installation_file.installations[i];
 	} else {
-		keyInst.push(dataI.installations[i]);
+		keyInst.push(installation_file.installations[i]);
 	}
 }
 
 var keyAct = [];
 
-for (var i = 0; i < dataA.activites.length; i++) {
-	if (dataA.activites[i].idActivite) {
-		keyAct[dataA.activites[i].idActivite] = dataA.activites[i];
+for (var i = 0; i < activite_file.activites.length; i++) {
+	if (activite_file.activites[i]._id) {
+		keyAct[activite_file.activites[i]._id] = activite_file.activites[i];
 	} else {
-		keyAct.push(dataA.activites[i]);
+		keyAct.push(activite_file.activites[i]);
 	}
 }
+
+var keyEqu = [];
+
+for (var i = 0; i < dataE.equipements.length; i++) {
+	if (dataE.equipements[i]._id) {
+		keyEqu[dataE.equipements[i]._id] = dataE.equipements[i];
+	} else {
+		keyEqu.push(dataE.equipements[i]);
+	}
+}
+
+//console.log(keyEqu);
 
 for (var i = 0; i < 10000; i++) {
 	randDate = Math.floor(Math.random() * daysOfYear.length);
 	randEqu = Math.floor(Math.random() * (dataE.equipements.length - 481200) + 100);
-	randAddr = Math.floor(Math.random() * dataAddr.addresses.length);
+	//randAddr = Math.floor(Math.random() * activite_fileddr.addresses.length);
 	while (dataE.equipements[randEqu].InsNumeroInstall == null) {
 		randEqu = Math.floor(Math.random() * dataE.equipements.length);
 	}
+
+	//console.log(keyInst);
 
 	nbParticipantsFemme = Math.floor(Math.random() * 50 + 1);
 	nbParticipantsFemmeMineur = Math.floor(Math.random() * nbParticipantsFemme);
@@ -105,7 +123,7 @@ for (var i = 0; i < 10000; i++) {
 			nbParticipantsHomme: nbParticipantsHomme,
 			nbSpectateursHomme: nbSpectateursHomme,
 			nbSpectateursFemme: nbSpectateursFemme,
-			idDate: daysOfYear[randDate]
+			date: daysOfYear[randDate]
 		});
 	} else if (i % 3) {
 		fait_activite.faitActivite.push({
@@ -123,7 +141,7 @@ for (var i = 0; i < 10000; i++) {
 			nbParticipantsFemme: nbParticipantsFemme,
 			nbSpectateursHomme: nbSpectateursHomme,
 			nbSpectateursFemme: nbSpectateursFemme,
-			idDate: daysOfYear[randDate]
+			date: daysOfYear[randDate]
 		});
 	} else if (i % 7) {
 		fait_activite.faitActivite.push({
@@ -143,7 +161,7 @@ for (var i = 0; i < 10000; i++) {
 			nbSpectateursFemme: nbSpectateursFemme,
 			nbParticipantsHommeAgee: nbParticipantsHommeAgee,
 			nbParticipantsFemmeAgee: nbParticipantsFemmeAgee,
-			idDate: daysOfYear[randDate]
+			date: daysOfYear[randDate]
 		});
 	} else {
 		fait_activite.faitActivite.push({
@@ -159,7 +177,7 @@ for (var i = 0; i < 10000; i++) {
 			nbParticipantsFemme: nbParticipantsFemme,
 			nbSpectateursHomme: nbSpectateursHomme,
 			nbSpectateursFemme: nbSpectateursFemme,
-			idDate: daysOfYear[randDate]
+			date: daysOfYear[randDate]
 		});
 	}
 }

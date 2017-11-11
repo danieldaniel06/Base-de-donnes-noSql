@@ -11,6 +11,9 @@ var faitActiviteSchema = mongoose.Schema({
 	idInst: {
 		type: String
 	},
+	nbParticipantsFemme: {
+		type: Number
+	},
 	nbParticipantsHomme: {
 		type: Number
 	},
@@ -48,7 +51,8 @@ module.exports.getFaitActiviteGroupByInst = function(callback, year) {
 		{
 			$group: {
 				_id: {
-					nomInstallation: '$nomInstallation'
+					nomInstallation: '$nomInstallation',
+					nomActivite: 'null'
 				},
 				sumNbParticipantsHomme: {
 					$sum: '$nbParticipantsHomme'
@@ -98,6 +102,7 @@ module.exports.getFaitActiviteGroupByActivite = function(callback, year) {
 		{
 			$group: {
 				_id: {
+					nomInstallation: 'null',
 					nomActivite: '$nomActivite'
 				},
 				sumNbParticipantsHomme: {
@@ -133,8 +138,8 @@ module.exports.getFaitActiviteGroupByActivite = function(callback, year) {
 };
 
 // les activites pratiquées groupée par installation et activite
-module.exports.getFaitActiviteGroupByInstActivite = function(callback) {
-	FaiActivite.aggregate([
+module.exports.getFaitActiviteGroupByInstActivite = function(callback, year) {
+	var query = [
 		{
 			$project: {
 				nomInstallation: '$installation.nomInstallation',
@@ -170,7 +175,19 @@ module.exports.getFaitActiviteGroupByInstActivite = function(callback) {
 			}
 		},
 		{
-			$sort: { nbFoixActivitePratiquee: -1 }
+			$sort: { '_id.nomInstallation': -1 }
 		}
-	]).exec(callback);
+	];
+	if (year) {
+		var copy = query;
+		query = [
+			{
+				$match: { 'idDate.year': parseInt(year) }
+			}
+		];
+		copy.forEach(function(doc) {
+			query.push(doc);
+		});
+	}
+	FaiActivite.aggregate(query).exec(callback);
 };
