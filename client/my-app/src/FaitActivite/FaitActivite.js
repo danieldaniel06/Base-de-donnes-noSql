@@ -188,30 +188,46 @@ class FaitActivite extends React.Component {
 					</tr>
 				);
 			});
+
 		}
 
 		return (
 			<div>
-				<label> Année </label>
-				<input
-					ref="query"
-					onChange={e => {
-						this.refresh(this.refs.query.value);
-					}}
-				/>
-				<table className="table table-striped">
-					<tbody>
-						<tr>
-							<th>Nom installation</th>
-							<th>Nom Activite</th>
-							<th>Total homme participant</th>
-							<th>Total Femme participant</th>
-						</tr>
-						{activitesC}
-						{activitesB}
-						{activitesTot}
-					</tbody>
-				</table>
+				<div className="col-lg-8">
+					<div className="input-group">
+						<span className="input-group-btn">
+							<button className="btn btn-secondary" type="button">
+								Année!
+							</button>
+						</span>
+						<input
+							ref="query"
+							onChange={e => {
+								this.refresh(this.refs.query.value);
+							}}
+							type="text"
+							class="form-control"
+							placeholder="Search for..."
+							aria-label="Search for..."
+						/>
+					</div>
+					<table className="table table-striped">
+						<tbody>
+							<tr>
+								<th>Nom installation</th>
+								<th>Nom Activite</th>
+								<th>Total homme participant</th>
+								<th>Total Femme participant</th>
+							</tr>
+							{activitesC}
+							{activitesB}
+							{activitesTot}
+						</tbody>
+					</table>
+				</div>
+				<div className="col-lg-4">
+
+				</div>
 			</div>
 		);
 	}
