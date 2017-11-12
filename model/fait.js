@@ -195,7 +195,7 @@ module.exports.getFaitActiviteGroupByInstActivite = function(callback, year) {
 module.exports.getTotatGroupActInst = function(callback, year) {
 	query = [
 		{
-			$match: { 'idDate.year': parseInt(year) }
+			$match: { 'date.year': parseInt(year) }
 		},
 		{
 			$group: {

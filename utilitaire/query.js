@@ -1,5 +1,7 @@
 var mapGroupInst = function() {
-	emit(this.idInst, { nbParticipantsHomme: this.nbParticipantsHomme });
+	emit(this.installation, { nbParticipantsHomme: this.nbParticipantsHomme });
+	emit(this.idEqu, { nbParticipantsHomme: this.nbParticipantsHomme });
+	emit({ act: this.idEqu, inst: this.installation }, { nbParticipantsHomme: this.nbParticipantsHomme });
 };
 
 var reduceGroupInst = function(keyInst, valuesnbParticipantsHomme) {
@@ -10,7 +12,20 @@ var reduceGroupInst = function(keyInst, valuesnbParticipantsHomme) {
 	return { nbParticipantsHomme: count };
 };
 
-db.fait_activites.mapReduce(mapGroupInst, reduceGroupInst, { out: 'groupByInst' });
+db.fait_activite.mapReduce(mapGroupInst, reduceGroupInst, {
+	out: 'groupByInst',
+	query: {
+		$project: {
+			nomInstallation: { $arrayElemAt: ['$installation.nomInstallation', 0] },
+			nomActivite: { $arrayElemAt: ['$activite.libelleActivite', 0] },
+			sumNbParticipantsHomme: '$sumNbParticipantsHomme',
+			sumNbParticipantsFemme: '$sumNbParticipantsFemme',
+			sumNbParticipantsHommeMineur: '$sumNbParticipantsHommeMineur',
+			sumNbParticipantsFemmeMineur: '$sumNbParticipantsFemmeMineur',
+			nbFoixActivitePratiquee: '$nbFoixActivitePratiquee'
+		}
+	}
+});
 
 db.groupByInst.find();
 
