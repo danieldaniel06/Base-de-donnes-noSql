@@ -1,4 +1,4 @@
-var installation_file = require('../jsonFiles/installation.json');
+var installation_file = require('../jsonFiles/installations.json');
 var installation_file_write = '/Users/danielahmed/Desktop/jsonFiles/installations_w.json';
 
 var equipement_file = '/Users/danielahmed/Desktop/jsonFiles/equipements.json';

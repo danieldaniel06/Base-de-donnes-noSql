@@ -35,3 +35,5 @@ var query = [
 		$sort: { NbSpectateursTotaux: -1 }
 	}
 ];
+
+db.fait_activite.aggregate(query);

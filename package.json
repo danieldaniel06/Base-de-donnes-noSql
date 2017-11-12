@@ -9,10 +9,11 @@
 	"author": "daniel",
 	"license": "ISC",
 	"dependencies": {
-		"express": "*",
 		"body-parser": "*",
-		"mongoose": "*",
+		"express": "*",
 		"mongodb": "^2.2.33",
+		"mongoose": "*",
+		"react-datepicker": "^0.60.2",
 		"xhr2": "^0.1.4",
 		"xmlhttprequest": "^1.8.0"
 	}
