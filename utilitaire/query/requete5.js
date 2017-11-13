@@ -1,27 +1,44 @@
-var query = [
-	{
+var query = [{
 		$project: {
 			nomActivite: '$activite.libAct',
 			nomIns: '$installation.nomInstallation',
 
 			month: '$date.month',
 			year: '$date.year',
-			specTotal: { $sum: ['$nbSpectateursHomme', '$nbSpectateursHomme'] }
+			specTotal: {
+				$sum: ['$nbSpectateursHomme', '$nbSpectateursHomme']
+			}
 		}
 	},
 	{
-		$match: { $and: [{ month: { $gt: 5, $lt: 10 } }, { year: 2017 }] }
+		$match: {
+			$and: [{
+				month: {
+					$gte: 5,
+					$lte: 10
+				}
+			}, {
+				year: {
+					$gte: 2017,
+					$lte: 2017
+				}
+			}]
+		}
 	},
 	{
 		$group: {
 			_id: {
 				nomActivite: '$nomActivite'
 			},
-			NbSpectateursTotaux: { $sum: '$specTotal' }
+			NbSpectateursTotaux: {
+				$sum: '$specTotal'
+			}
 		}
 	},
 	{
-		$sort: { NbSpectateursTotaux: -1 }
+		$sort: {
+			NbSpectateursTotaux: -1
+		}
 	},
 	{
 		$limit: 10

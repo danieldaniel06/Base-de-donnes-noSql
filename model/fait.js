@@ -1,3 +1,5 @@
+import { any } from '../../../Library/Caches/typescript/2.6/node_modules/@types/async';
+
 var mongoose = require('mongoose');
 global = require('../global');
 
@@ -28,7 +30,18 @@ var faitActiviteSchema = mongoose.Schema({
 	}
 });
 
+var cubeInstAct = mongoose.Schema({
+	key: {
+		type: any
+	},
+	value: {
+		type: any
+	}
+});
+
 var FaiActivite = (module.exports = mongoose.model(global.faitCollection, faitActiviteSchema));
+
+module.exports.cubeInstAct = function(callback) {};
 
 // les activites pratiquées
 module.exports.getFaitActivite = function(callback, limit) {
