@@ -4,9 +4,9 @@
  * mineur, Femme mineur) par le nom de l'installation et le nom de l'activite
  */
 
-var year = 2005;
+var year = 2017;
 
-var query = [
+var query1 = [
 	{
 		$project: {
 			nomInst: '$installation.nomInst',
@@ -17,25 +17,28 @@ var query = [
 	{
 		$group: {
 			_id: {
-				nomInst: '$nomInst',
-				libAct: 'null'
+				nomInst: '$nomInst'
 			},
 			sumNbParticipantsHomme: {
 				$sum: '$nbParticipantsHomme'
 			},
 			sumNbParticipantsFemme: {
 				$sum: '$nbParticipantsFemme'
-			},
-			nbFoixActivitePratiquee: {
-				$sum: 1
+			}
+		}
+	},
+	{
+		$project: {
+			totalParticipants: {
+				$sum: ['$sumNbParticipantsHomme', '$sumNbParticipantsFemme']
 			}
 		}
 	}
 ];
 
-db.fait_activites.aggregate(query);
+db.fait_activites.aggregate(query1).forEach(printjson);
 
-var query = [
+var query2 = [
 	{
 		$project: {
 			libAct: '$libAct',
@@ -46,7 +49,6 @@ var query = [
 	{
 		$group: {
 			_id: {
-				nomInst: 'null',
 				libAct: '$libAct'
 			},
 			sumNbParticipantsHomme: {
@@ -54,17 +56,21 @@ var query = [
 			},
 			sumNbParticipantsFemme: {
 				$sum: '$nbParticipantsFemme'
-			},
-			nbFoixActivitePratiquee: {
-				$sum: 1
+			}
+		}
+	},
+	{
+		$project: {
+			totalParticipants: {
+				$sum: ['$sumNbParticipantsHomme', '$sumNbParticipantsFemme']
 			}
 		}
 	}
 ];
 
-db.fait_activites.aggregate(query);
+db.fait_activites.aggregate(query2).forEach(printjson);
 
-var query = [
+var query3 = [
 	{
 		$project: {
 			nomInst: '$installation.nomInst',
@@ -84,20 +90,21 @@ var query = [
 			},
 			sumNbParticipantsFemme: {
 				$sum: '$nbParticipantsFemme'
-			},
-			nbFoixActivitePratiquee: {
-				$sum: 1
+			}
+		}
+	},
+	{
+		$project: {
+			totalParticipants: {
+				$sum: ['$sumNbParticipantsHomme', '$sumNbParticipantsFemme']
 			}
 		}
 	}
 ];
 
-db.fait_activites.aggregate(query);
+db.fait_activites.aggregate(query3).forEach(printjson);
 
-query = [
-	{
-		$match: { 'date.year': parseInt(year) }
-	},
+query4 = [
 	{
 		$group: {
 			_id: null,
@@ -108,29 +115,14 @@ query = [
 				$sum: '$nbParticipantsFemme'
 			}
 		}
-	}
-];
-
-db.fait_activites.aggregate(query);
-
-query = [
-	{
-		$match: { installation: { $ne: null } }
 	},
 	{
-		$group: {
-			_id: null,
-			sumNbParticipantsHomme: {
-				$sum: '$nbParticipantsHomme'
-			},
-			sumNbParticipantsFemme: {
-				$sum: '$nbParticipantsFemme'
-			},
-			count: {
-				$sum: 1
+		$project: {
+			totalParticipants: {
+				$sum: ['$sumNbParticipantsHomme', '$sumNbParticipantsFemme']
 			}
 		}
 	}
 ];
 
-db.fait_activites.aggregate(query);
+db.fait_activites.aggregate(query4).forEach(printjson);

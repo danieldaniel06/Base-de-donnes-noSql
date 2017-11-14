@@ -23,7 +23,7 @@ var reduceDepDate = function(key, budgets) {
 };
 
 db.fait_activites.mapReduce(mapDepDate, reduceDepDate, {
-	out: 'cubeBudgetDepAnnee',
+	out: { inline: 1 },
 	query: {
 		niveau: 'Scolaire'
 	}

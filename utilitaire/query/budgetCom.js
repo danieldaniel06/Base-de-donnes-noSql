@@ -24,7 +24,7 @@ var reduceComDate = function(key, budgets) {
 };
 
 db.fait_activites.mapReduce(mapComDate, reduceComDate, {
-	out: 'cubeBudgetComAnnee'
+	out: { inline: 1 }
 });
 
 db.cubeBudgetComAnnee.find().forEach(printjson);

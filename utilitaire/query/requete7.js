@@ -21,7 +21,7 @@ var reduceNbActDep = function(keyInst, values) {
 var query = {};
 
 db.fait_activites.mapReduce(mapNbActDep, reduceNbActDep, {
-	out: 'statNbActDep',
+	out: { inline: 1 },
 	query: query
 });
 

@@ -50,7 +50,7 @@ var reduceGroupInst = function(key, values) {
 };
 
 db.fait_activites.mapReduce(mapGroupInst, reduceGroupInst, {
-	out: 'cubeInstAct'
+	out: { inline: 1 }
 });
 
-db.cubeInstAct.find().forEach(printjson);
+//db.cubeInstAct.find().forEach(printjson);

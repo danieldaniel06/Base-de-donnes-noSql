@@ -53,8 +53,8 @@ var k = 0;
 for (var i = 0; i < activites.activites.length - 200000; i++) {
 	var coutNumber = Math.random() * 2000;
 	var coutBudget = Math.random() * 3000;
-	activites.activites[i].cout = coutNumber.toPrecision(6);
-	activites.activites[i].budget = coutBudget.toPrecision(6);
+	activites.activites[i].cout = new Number(coutNumber.toPrecision(6));
+	activites.activites[i].budget = new Number(coutBudget.toPrecision(6));
 	randDate = Math.floor(Math.random() * daysOfYear.length);
 	activites.activites[i].date = daysOfYear[randDate];
 
