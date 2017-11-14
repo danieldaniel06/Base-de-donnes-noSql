@@ -3,12 +3,11 @@
  */
 
 var mapComDate = function() {
-	var installation = this.installation;
 	var date = this.date;
 	var equipement = this.equipement;
-	if (installation && date) {
-		emit({ commune: installation.commune, annee: date.year }, { totalBudget: this.budget });
-		emit({ commune: installation.commune }, { totalBudget: this.budget });
+	if (equipement && date) {
+		emit({ commune: equipement.libCom, annee: date.year }, { totalBudget: this.budget });
+		emit({ commune: equipement.libCom }, { totalBudget: this.budget });
 		emit(null, { totalBudget: this.budget });
 	}
 };
@@ -25,10 +24,7 @@ var reduceComDate = function(key, budgets) {
 };
 
 db.fait_activites.mapReduce(mapComDate, reduceComDate, {
-	out: 'cubeBudgetComAnnee',
-	query: {
-		niveau: 'Scolaire'
-	}
+	out: 'cubeBudgetComAnnee'
 });
 
 db.cubeBudgetComAnnee.find().forEach(printjson);

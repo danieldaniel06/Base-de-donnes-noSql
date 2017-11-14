@@ -50,6 +50,14 @@ app.get('/api/fait_activites/statBudgetCommAnne/:niveau', function(req, res) {
 	}, req.params.niveau);
 });
 
+app.get('/api/fait_activites/statBudgetCommAnne', function(req, res) {
+	FaitActivite.getStatBudgetCommAnne(function(err, dbres) {
+		if (err) throw err;
+
+		res.json(dbres);
+	});
+});
+
 app.get('/api/fait_activites/topNSpectPart/:n/:dateDeb/:dateFin', function(req, res) {
 	var dateDeb = new Date(req.params.dateDeb);
 	var dateFin = new Date(req.params.dateFin);

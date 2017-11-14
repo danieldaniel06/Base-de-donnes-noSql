@@ -34,6 +34,7 @@ var FaitActivite = (module.exports = mongoose.model(global.faitCollection, faitA
 
 module.exports.getStatBudgetDep = function(callback, niveau) {
 	var obj = {};
+	var query = {};
 
 	obj.map = function() {
 		var equipement = this.equipement;
@@ -68,14 +69,13 @@ module.exports.getStatBudgetDep = function(callback, niveau) {
 
 module.exports.getStatBudgetCommAnne = function(callback, niveau) {
 	var obj = {};
-
+	var query = {};
 	obj.map = function() {
-		var installation = this.installation;
 		var date = this.date;
 		var equipement = this.equipement;
-		if (installation && date) {
-			emit({ commune: installation.commune, annee: date.year }, { totalBudget: parseFloat(this.budget) });
-			emit({ commune: installation.commune }, { totalBudget: parseFloat(this.budget) });
+		if (equipement && date) {
+			emit({ commune: equipement.libCom, annee: date.year }, { totalBudget: parseFloat(this.budget) });
+			emit({ commune: equipement.libCom }, { totalBudget: parseFloat(this.budget) });
 			emit(null, { totalBudget: parseFloat(this.budget) });
 		}
 	};
