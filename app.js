@@ -34,6 +34,38 @@ app.get('/', function(req, res) {
 	res.send({ message: 'Please use api/' });
 });
 
+app.get('/api/fait_activites/statBudgetDepAnne/:niveau', function(req, res) {
+	FaitActivite.getStatBudgetDep(function(err, dbres) {
+		if (err) throw err;
+
+		res.json(dbres);
+	}, req.params.niveau);
+});
+
+app.get('/api/fait_activites/statBudgetCommAnne/:niveau', function(req, res) {
+	FaitActivite.getStatBudgetCommAnne(function(err, dbres) {
+		if (err) throw err;
+
+		res.json(dbres);
+	}, req.params.niveau);
+});
+
+app.get('/api/fait_activites/topNSpectPart/:n/:dateDeb/:dateFin', function(req, res) {
+	var dateDeb = new Date(req.params.dateDeb);
+	var dateFin = new Date(req.params.dateFin);
+	FaitActivite.getTopNSpectateurAct(
+		function(err, fait) {
+			if (err) {
+				throw err;
+			}
+			res.json(fait);
+		},
+		req.params.n,
+		dateDeb,
+		dateFin
+	);
+});
+
 app.get('/api/fait_activites', function(req, res) {
 	FaitActivite.getFaitActivite(function(err, fait) {
 		if (err) {

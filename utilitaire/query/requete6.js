@@ -6,37 +6,51 @@
 
 var mapGroupInst = function() {
 	var inst = this.installation;
-	var activite = this.activite;
-	if (inst && activite) {
+	if (inst) {
 		emit(
-			{ nomInstallation: inst.nomInstallation, nomActivite: activite.libAct },
-			{ nbParticipantsHomme: this.nbParticipantsHomme }
+			{ nomInst: inst.nomInst, nomActivite: this.libAct },
+			{
+				totalParticipantsHomme: this.nbParticipantsHomme,
+				totalParticipantsFemme: this.nbParticipantsFemme
+			}
 		);
 		emit(
-			{ nomInstallation: inst.nomInstallation, nomActivite: 'ZZZZ' },
-			{ nbParticipantsHomme: this.nbParticipantsHomme }
+			{ nomInst: inst.nomInst },
+			{
+				totalParticipantsHomme: this.nbParticipantsHomme,
+				totalParticipantsFemme: this.nbParticipantsFemme
+			}
 		);
 		emit(
-			{ nomInstallation: 'ZZZZ', nomActivite: activite.libAct },
-			{ nbParticipantsHomme: this.nbParticipantsHomme }
+			{ nomActivite: this.libAct },
+			{
+				totalParticipantsHomme: this.nbParticipantsHomme,
+				totalParticipantsFemme: this.nbParticipantsFemme
+			}
 		);
-		emit({ nomInstallation: 'ZZZZ', nomActivite: 'ZZZZ' }, { nbParticipantsHomme: this.nbParticipantsHomme });
+
+		emit(null, {
+			totalParticipantsHomme: this.nbParticipantsHomme,
+			totalParticipantsFemme: this.nbParticipantsFemme
+		});
 	}
 };
 
-var reduceGroupInst = function(keyInst, valuesnbParticipantsHomme) {
-	var count = 0;
-	for (var i = 0; i < valuesnbParticipantsHomme.length; i++) {
-		count += valuesnbParticipantsHomme[i].nbParticipantsHomme;
-	}
-	return { nbParticipantsHomme: count };
+var reduceGroupInst = function(key, values) {
+	var reducedVal = { totalParticipants: 0 };
+	var totalParticipantsHomme = 0;
+	var totalParticipantsFemme = 0;
+
+	values.forEach(function(value) {
+		if (value.totalParticipantsHomme) totalParticipantsHomme += parseInt(value.totalParticipantsHomme);
+		if (value.totalParticipantsFemme) totalParticipantsFemme += parseInt(value.totalParticipantsFemme);
+	});
+	reducedVal.totalParticipants += totalParticipantsHomme + totalParticipantsFemme;
+	return reducedVal;
 };
 
-db.fait_activite.mapReduce(mapGroupInst, reduceGroupInst, {
-	out: 'cubeInstAct',
-	query: {
-		'date.year': 2017
-	}
+db.fait_activites.mapReduce(mapGroupInst, reduceGroupInst, {
+	out: 'cubeInstAct'
 });
 
-db.groupByInst.find().forEach(printjson);
+db.cubeInstAct.find().forEach(printjson);

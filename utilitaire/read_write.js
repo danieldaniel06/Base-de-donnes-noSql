@@ -11,6 +11,8 @@ var activite_file_write = '/Users/danielahmed/Desktop/jsonFiles/activites_w.json
 
 var addresses_file = require('../jsonFiles/addresses.json');
 
+var niveau_file = require('../jsonFiles/niveau.json');
+
 //console.log(installation_file.installations);
 
 readFile = function(file) {
@@ -91,12 +93,18 @@ for (var i = 0; i < dataE.equipements.length; i++) {
 
 //console.log(keyEqu);
 
-for (var i = 0; i < 10000; i++) {
+for (var i = 0; i < 20000; i++) {
 	randDate = Math.floor(Math.random() * daysOfYear.length);
-	randEqu = Math.floor(Math.random() * (dataE.equipements.length - 481200) + 100);
+	randEqu = Math.floor(Math.random() * (dataE.equipements.length - (dataE.equipements.length - 2000)) + 100);
+	randNiv = Math.floor(Math.random() * niveau_file.niveaux.length);
 	//randAddr = Math.floor(Math.random() * activite_fileddr.addresses.length);
-	while (dataE.equipements[randEqu].InsNumeroInstall == null) {
-		randEqu = Math.floor(Math.random() * dataE.equipements.length);
+	console.log(randEqu);
+	while (
+		!dataE.equipements[randEqu].InsNumeroInstall ||
+		(keyInst[dataE.equipements[randEqu].InsNumeroInstall] &&
+			!keyInst[dataE.equipements[randEqu].InsNumeroInstall].codePostal)
+	) {
+		randEqu = Math.floor(Math.random() * (dataE.equipements.length - (dataE.equipements.length - 2000)) + 100);
 	}
 
 	//console.log(keyInst);
@@ -117,13 +125,14 @@ for (var i = 0; i < 10000; i++) {
 				dataE.equipements[randEqu].InsNumeroInstall +
 				dataE.equipements[randEqu].idActivite +
 				daysOfYear[randDate]._id,
-			idEqu: dataE.equipements[randEqu].idEquipement,
+			equipement: keyEqu[dataE.equipements[randEqu].idEquipement],
 			activite: keyAct[dataE.equipements[randEqu].idActivite],
 			installation: keyInst[dataE.equipements[randEqu].InsNumeroInstall],
 			nbParticipantsHomme: nbParticipantsHomme,
 			nbSpectateursHomme: nbSpectateursHomme,
 			nbSpectateursFemme: nbSpectateursFemme,
-			date: daysOfYear[randDate]
+			date: daysOfYear[randDate],
+			niveau: niveau_file.niveaux[randNiv].niveau
 		});
 	} else if (i % 3) {
 		fait_activite.faitActivite.push({
@@ -132,7 +141,7 @@ for (var i = 0; i < 10000; i++) {
 				dataE.equipements[randEqu].InsNumeroInstall +
 				dataE.equipements[randEqu].idActivite +
 				daysOfYear[randDate]._id,
-			idEqu: dataE.equipements[randEqu].idEquipement,
+			equipement: keyEqu[dataE.equipements[randEqu].idEquipement],
 			activite: keyAct[dataE.equipements[randEqu].idActivite],
 			installation: keyInst[dataE.equipements[randEqu].InsNumeroInstall],
 			nbParticipantsFemmeMineur: nbParticipantsFemmeMineur,
@@ -141,7 +150,8 @@ for (var i = 0; i < 10000; i++) {
 			nbParticipantsFemme: nbParticipantsFemme,
 			nbSpectateursHomme: nbSpectateursHomme,
 			nbSpectateursFemme: nbSpectateursFemme,
-			date: daysOfYear[randDate]
+			date: daysOfYear[randDate],
+			niveau: niveau_file.niveaux[randNiv].niveau
 		});
 	} else if (i % 7) {
 		fait_activite.faitActivite.push({
@@ -150,7 +160,7 @@ for (var i = 0; i < 10000; i++) {
 				dataE.equipements[randEqu].InsNumeroInstall +
 				dataE.equipements[randEqu].idActivite +
 				daysOfYear[randDate]._id,
-			idEqu: dataE.equipements[randEqu].idEquipement,
+			equipement: keyEqu[dataE.equipements[randEqu].idEquipement],
 			activite: keyAct[dataE.equipements[randEqu].idActivite],
 			installation: keyInst[dataE.equipements[randEqu].InsNumeroInstall],
 			nbParticipantsFemmeMineur: nbParticipantsFemmeMineur,
@@ -161,7 +171,8 @@ for (var i = 0; i < 10000; i++) {
 			nbSpectateursFemme: nbSpectateursFemme,
 			nbParticipantsHommeAgee: nbParticipantsHommeAgee,
 			nbParticipantsFemmeAgee: nbParticipantsFemmeAgee,
-			date: daysOfYear[randDate]
+			date: daysOfYear[randDate],
+			niveau: niveau_file.niveaux[randNiv].niveau
 		});
 	} else {
 		fait_activite.faitActivite.push({
@@ -170,14 +181,15 @@ for (var i = 0; i < 10000; i++) {
 				dataE.equipements[randEqu].InsNumeroInstall +
 				dataE.equipements[randEqu].idActivite +
 				daysOfYear[randDate]._id,
-			idEqu: dataE.equipements[randEqu].idEquipement,
+			equipement: keyEqu[dataE.equipements[randEqu].idEquipement],
 			activite: keyAct[dataE.equipements[randEqu].idActivite],
 			installation: keyInst[dataE.equipements[randEqu].InsNumeroInstall],
 			nbParticipantsHomme: nbParticipantsHomme,
 			nbParticipantsFemme: nbParticipantsFemme,
 			nbSpectateursHomme: nbSpectateursHomme,
 			nbSpectateursFemme: nbSpectateursFemme,
-			date: daysOfYear[randDate]
+			date: daysOfYear[randDate],
+			niveau: niveau_file.niveaux[randNiv].niveau
 		});
 	}
 }

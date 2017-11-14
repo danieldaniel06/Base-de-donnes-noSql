@@ -9,31 +9,22 @@ var year = 2005;
 var query = [
 	{
 		$project: {
-			nomInstallation: '$installation.nomInstallation',
-			idAct: '$idAct',
+			nomInst: '$installation.nomInst',
 			nbParticipantsHomme: '$nbParticipantsHomme',
-			nbParticipantsFemme: '$nbParticipantsFemme',
-			nbParticipantsHommeMineur: '$nbParticipantsHommeMineur',
-			nbParticipantsFemmeMineur: '$nbParticipantsFemmeMineur'
+			nbParticipantsFemme: '$nbParticipantsFemme'
 		}
 	},
 	{
 		$group: {
 			_id: {
-				nomInstallation: '$nomInstallation',
-				nomActivite: 'null'
+				nomInst: '$nomInst',
+				libAct: 'null'
 			},
 			sumNbParticipantsHomme: {
 				$sum: '$nbParticipantsHomme'
 			},
 			sumNbParticipantsFemme: {
 				$sum: '$nbParticipantsFemme'
-			},
-			sumNbParticipantsHommeMineur: {
-				$sum: '$nbParticipantsHommeMineur'
-			},
-			sumNbParticipantsFemmeMineur: {
-				$sum: '$nbParticipantsFemmeMineur'
 			},
 			nbFoixActivitePratiquee: {
 				$sum: 1
@@ -42,36 +33,27 @@ var query = [
 	}
 ];
 
-db.fait_activite.aggregate(query);
+db.fait_activites.aggregate(query);
 
 var query = [
 	{
 		$project: {
-			nomActivite: '$activite.libelleActivite',
-			idAct: '$idAct',
+			libAct: '$libAct',
 			nbParticipantsHomme: '$nbParticipantsHomme',
-			nbParticipantsFemme: '$nbParticipantsFemme',
-			nbParticipantsHommeMineur: '$nbParticipantsHommeMineur',
-			nbParticipantsFemmeMineur: '$nbParticipantsFemmeMineur'
+			nbParticipantsFemme: '$nbParticipantsFemme'
 		}
 	},
 	{
 		$group: {
 			_id: {
-				nomInstallation: 'null',
-				nomActivite: '$nomActivite'
+				nomInst: 'null',
+				libAct: '$libAct'
 			},
 			sumNbParticipantsHomme: {
 				$sum: '$nbParticipantsHomme'
 			},
 			sumNbParticipantsFemme: {
 				$sum: '$nbParticipantsFemme'
-			},
-			sumNbParticipantsHommeMineur: {
-				$sum: '$nbParticipantsHommeMineur'
-			},
-			sumNbParticipantsFemmeMineur: {
-				$sum: '$nbParticipantsFemmeMineur'
 			},
 			nbFoixActivitePratiquee: {
 				$sum: 1
@@ -80,37 +62,28 @@ var query = [
 	}
 ];
 
-db.fait_activite.aggregate(query);
+db.fait_activites.aggregate(query);
 
 var query = [
 	{
 		$project: {
-			nomInstallation: '$installation.nomInstallation',
-			nomActivite: '$activite.libelleActivite',
-			idAct: '$idAct',
+			nomInst: '$installation.nomInst',
+			libAct: '$libAct',
 			nbParticipantsHomme: '$nbParticipantsHomme',
-			nbParticipantsFemme: '$nbParticipantsFemme',
-			nbParticipantsHommeMineur: '$nbParticipantsHommeMineur',
-			nbParticipantsFemmeMineur: '$nbParticipantsFemmeMineur'
+			nbParticipantsFemme: '$nbParticipantsFemme'
 		}
 	},
 	{
 		$group: {
 			_id: {
-				nomInstallation: '$nomInstallation',
-				nomActivite: '$nomActivite'
+				nomInst: '$nomInst',
+				libAct: '$libAct'
 			},
 			sumNbParticipantsHomme: {
 				$sum: '$nbParticipantsHomme'
 			},
 			sumNbParticipantsFemme: {
 				$sum: '$nbParticipantsFemme'
-			},
-			sumNbParticipantsHommeMineur: {
-				$sum: '$nbParticipantsHommeMineur'
-			},
-			sumNbParticipantsFemmeMineur: {
-				$sum: '$nbParticipantsFemmeMineur'
 			},
 			nbFoixActivitePratiquee: {
 				$sum: 1
@@ -119,7 +92,7 @@ var query = [
 	}
 ];
 
-db.fait_activite.aggregate(query);
+db.fait_activites.aggregate(query);
 
 query = [
 	{
@@ -133,15 +106,31 @@ query = [
 			},
 			sumNbParticipantsFemme: {
 				$sum: '$nbParticipantsFemme'
-			},
-			sumNbParticipantsHommeMineur: {
-				$sum: '$nbParticipantsHommeMineur'
-			},
-			sumNbParticipantsFemmeMineur: {
-				$sum: '$nbParticipantsFemmeMineur'
 			}
 		}
 	}
 ];
 
-db.fait_activite.aggregate(query);
+db.fait_activites.aggregate(query);
+
+query = [
+	{
+		$match: { installation: { $ne: null } }
+	},
+	{
+		$group: {
+			_id: null,
+			sumNbParticipantsHomme: {
+				$sum: '$nbParticipantsHomme'
+			},
+			sumNbParticipantsFemme: {
+				$sum: '$nbParticipantsFemme'
+			},
+			count: {
+				$sum: 1
+			}
+		}
+	}
+];
+
+db.fait_activites.aggregate(query);

@@ -6,26 +6,25 @@
 var query = [
 	{
 		$project: {
-			nivActivite: '$activite.libNivAct',
-			nomActivite: '$activite.libAct',
-			nomIns: '$installation.nomInstallation',
+			nivActivite: '$niveau',
+			nomActivite: '$libAct',
+			codeDep: '$installation.codeDep',
+			nomIns: '$installation.nomInst',
 
 			month: '$date.month',
 			year: '$date.year',
-			SpectateursHomme: '$nbSpectateursHomme',
-			SpectateursFemme: '$nbSpectateursFemme',
 			specTotal: { $sum: ['$nbSpectateursHomme', '$nbSpectateursHomme'] }
 		}
 	},
 	{
-		$match: { $and: [{ month: { $gt: 5, $lt: 10 } }, { year: 2017 }] }
+		$match: { codeDep: '44' }
 	},
 	{
 		$group: {
 			_id: {
 				niveau: '$nivActivite',
 				nomActivite: '$nomActivite',
-				dep: '$depIns',
+				dep: '$codeDep',
 				mois: '$month',
 				annee: '$year'
 			},
@@ -36,3 +35,5 @@ var query = [
 		$sort: { NbSpectateursTotaux: -1 }
 	}
 ];
+
+db.fait_activites.aggregate(query);

@@ -1,17 +1,17 @@
-import { any } from '../../../Library/Caches/typescript/2.6/node_modules/@types/async';
-
 var mongoose = require('mongoose');
+mongoose.set('debug', true);
+
 global = require('../global');
 
 var faitActiviteSchema = mongoose.Schema({
 	idEqu: {
-		type: Number
+		type: Object
 	},
-	idAct: {
-		type: Number
+	activite: {
+		type: Object
 	},
-	idInst: {
-		type: String
+	installation: {
+		type: Object
 	},
 	nbParticipantsFemme: {
 		type: Number
@@ -25,27 +25,142 @@ var faitActiviteSchema = mongoose.Schema({
 	nbSpectateursFemme: {
 		type: Number
 	},
-	idDate: {
-		type: String
+	date: {
+		type: Object
 	}
 });
 
-var cubeInstAct = mongoose.Schema({
-	key: {
-		type: any
-	},
-	value: {
-		type: any
+var FaitActivite = (module.exports = mongoose.model(global.faitCollection, faitActiviteSchema));
+
+module.exports.getStatBudgetDep = function(callback, niveau) {
+	var obj = {};
+
+	obj.map = function() {
+		var equipement = this.equipement;
+		var date = this.date;
+		if (equipement && date) {
+			emit({ libDep: equipement.libDep, annee: date.year }, { totalBudget: parseFloat(this.budget) });
+			emit({ libDep: equipement.libDep }, { totalBudget: parseFloat(this.budget) });
+			emit(null, { totalBudget: parseFloat(this.budget) });
+		}
+	};
+
+	obj.reduce = function(key, budgets) {
+		var totalBudget = 0;
+		budgets.forEach(function(budget) {
+			if (budget.totalBudget) totalBudget += parseFloat(budget.totalBudget);
+		});
+		return {
+			totalBudget: totalBudget
+		};
+	};
+
+	if (niveau) {
+		query = {
+			niveau: niveau
+		};
 	}
-});
 
-var FaiActivite = (module.exports = mongoose.model(global.faitCollection, faitActiviteSchema));
+	obj.query = query;
 
-module.exports.cubeInstAct = function(callback) {};
+	FaitActivite.mapReduce(obj, callback);
+};
+
+module.exports.getStatBudgetCommAnne = function(callback, niveau) {
+	var obj = {};
+
+	obj.map = function() {
+		var installation = this.installation;
+		var date = this.date;
+		var equipement = this.equipement;
+		if (installation && date) {
+			emit({ commune: installation.commune, annee: date.year }, { totalBudget: parseFloat(this.budget) });
+			emit({ commune: installation.commune }, { totalBudget: parseFloat(this.budget) });
+			emit(null, { totalBudget: parseFloat(this.budget) });
+		}
+	};
+
+	obj.reduce = function(key, budgets) {
+		var totalBudget = 0;
+		var query = {};
+		budgets.forEach(function(budget) {
+			if (budget.totalBudget) totalBudget += parseFloat(budget.totalBudget);
+		});
+
+		return {
+			totalBudget: totalBudget
+		};
+	};
+
+	if (niveau) {
+		query = {
+			niveau: niveau
+		};
+	}
+
+	obj.query = query;
+
+	FaitActivite.mapReduce(obj, callback);
+};
+
+module.exports.getTopNSpectateurAct = function(callback, limit, dateDebut, dateFin) {
+	var query = [
+		{
+			$project: {
+				nomActivite: '$libAct',
+				nomIns: '$installation.nomInst',
+
+				month: '$date.month',
+				year: '$date.year',
+				specTotal: {
+					$sum: ['$nbSpectateursHomme', '$nbSpectateursHomme']
+				}
+			}
+		},
+		{
+			$match: {
+				$and: [
+					{
+						month: {
+							$gte: dateDebut.getMonth(),
+							$lte: dateFin.getMonth()
+						}
+					},
+					{
+						year: {
+							$gte: dateDebut.getFullYear(),
+							$lte: dateFin.getFullYear()
+						}
+					}
+				]
+			}
+		},
+		{
+			$group: {
+				_id: {
+					nomActivite: '$nomActivite'
+				},
+				NbSpectateursTotaux: {
+					$sum: '$specTotal'
+				}
+			}
+		},
+		{
+			$sort: {
+				NbSpectateursTotaux: -1
+			}
+		},
+		{
+			$limit: parseInt(limit)
+		}
+	];
+
+	FaitActivite.aggregate(query).exec(callback);
+};
 
 // les activites pratiquées
 module.exports.getFaitActivite = function(callback, limit) {
-	FaiActivite.find(callback).limit(limit);
+	FaitActivite.find(callback).limit(limit);
 };
 
 // les activites pratiquées groupée par installation
@@ -53,7 +168,7 @@ module.exports.getFaitActiviteGroupByInst = function(callback, year) {
 	var query = [
 		{
 			$project: {
-				nomInstallation: '$installation.nomInstallation',
+				nomInstallation: '$installation.nomInst',
 				idAct: '$idAct',
 				nbParticipantsHomme: '$nbParticipantsHomme',
 				nbParticipantsFemme: '$nbParticipantsFemme',
@@ -89,14 +204,14 @@ module.exports.getFaitActiviteGroupByInst = function(callback, year) {
 		var copy = query;
 		query = [
 			{
-				$match: { 'idDate.year': parseInt(year) }
+				$match: { 'date.year': parseInt(year) }
 			}
 		];
 		copy.forEach(function(doc) {
 			query.push(doc);
 		});
 	}
-	FaiActivite.aggregate(query).exec(callback);
+	FaitActivite.aggregate(query).exec(callback);
 };
 
 // les activites pratiquées groupée par activite
@@ -104,7 +219,7 @@ module.exports.getFaitActiviteGroupByActivite = function(callback, year) {
 	var query = [
 		{
 			$project: {
-				nomActivite: '$activite.libelleActivite',
+				nomActivite: '$libAct',
 				idAct: '$idAct',
 				nbParticipantsHomme: '$nbParticipantsHomme',
 				nbParticipantsFemme: '$nbParticipantsFemme',
@@ -140,14 +255,14 @@ module.exports.getFaitActiviteGroupByActivite = function(callback, year) {
 		var copy = query;
 		query = [
 			{
-				$match: { 'idDate.year': parseInt(year) }
+				$match: { 'date.year': parseInt(year) }
 			}
 		];
 		copy.forEach(function(doc) {
 			query.push(doc);
 		});
 	}
-	FaiActivite.aggregate(query).exec(callback);
+	FaitActivite.aggregate(query).exec(callback);
 };
 
 // les activites pratiquées groupée par installation et activite
@@ -155,8 +270,8 @@ module.exports.getFaitActiviteGroupByInstActivite = function(callback, year) {
 	var query = [
 		{
 			$project: {
-				nomInstallation: '$installation.nomInstallation',
-				nomActivite: '$activite.libelleActivite',
+				nomInstallation: '$installation.nomInst',
+				nomActivite: '$libAct',
 				idAct: '$idAct',
 				nbParticipantsHomme: '$nbParticipantsHomme',
 				nbParticipantsFemme: '$nbParticipantsFemme',
@@ -188,21 +303,21 @@ module.exports.getFaitActiviteGroupByInstActivite = function(callback, year) {
 			}
 		},
 		{
-			$sort: { '_id.nomInstallation': -1 }
+			$sort: { '_id.nomInst': -1 }
 		}
 	];
 	if (year) {
 		var copy = query;
 		query = [
 			{
-				$match: { 'idDate.year': parseInt(year) }
+				$match: { 'date.year': parseInt(year) }
 			}
 		];
 		copy.forEach(function(doc) {
 			query.push(doc);
 		});
 	}
-	FaiActivite.aggregate(query).exec(callback);
+	FaitActivite.aggregate(query).exec(callback);
 };
 
 module.exports.getTotatGroupActInst = function(callback, year) {
@@ -229,5 +344,5 @@ module.exports.getTotatGroupActInst = function(callback, year) {
 		}
 	];
 
-	FaiActivite.aggregate(query).exec(callback);
+	FaitActivite.aggregate(query).exec(callback);
 };
