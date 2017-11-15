@@ -108,7 +108,9 @@ Les faits numériques qui renseigne notre table de fait sont le nombre de specta
 
 ![alt tag](https://user-images.githubusercontent.com/16761554/32834842-4ff89538-ca04-11e7-8d76-a48fac7cd451.png)
 
-Nous obtenons le schéma ci-dessus. Nous avons choisis de la modifier un peu la table de fait, En effet sur mongodb, il y a deux manière de représenter un document “Embedded Documents” qui consiste à tout mettre dans un seul document ou “Database References” qui consiste en la séparation des tables en utilisant leurs clé pour les référencer comme en relationnel. Nous avons choisis “Embedded Document” pour une question de performance car pas besoin de faire une jointure entre deux document (elle est déjà faite en quelque sorte).
+Nous obtenons le schéma ci-dessus.
+
+Nous avons choisis de la modifier un peu la table de fait, En effet sur mongodb, il y a deux manière de représenter un document “Embedded Documents” qui consiste à tout mettre dans un seul document ou “Database References” qui consiste en la séparation des tables en utilisant leurs clé pour les référencer comme en relationnel. Nous avons choisis “Embedded Document” pour une question de performance car pas besoin de faire une jointure entre deux document (elle est déjà faite en quelque sorte).
 La table de fait généré comporte : 383 723 documents.
 
 Un exemple d'un document dans notre table de fait :
