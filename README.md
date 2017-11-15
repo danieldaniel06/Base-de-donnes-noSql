@@ -1,8 +1,8 @@
-# Base-de-donnes-noSql
-Le fichier NOSQL.zip contient le projet talend => à ouvrir avec talend et ne pas oublier des redéfinir tous les chemins dans le job.
+# Tutoriel pour lancer l'application
 
 Pré-requis
 ==========
+
 - Avoir nodejs sur sa machine
 - Avoir mongodb sur sa machine
 
@@ -128,3 +128,7 @@ Annexe
   - NodeJS: https://nodejs.org/en/
   - ReactJS: https://reactjs.org/
 
+- NOSQL.zip
+
+Le fichier NOSQL.zip contient le projet talend
+Importer le projet dans talend et ne pas oublier des redéfinir tous les chemins des fichiers, en entrée et en sortie.
