@@ -35,8 +35,8 @@ Installation
 Compte Rendus du Projet Base de donnée
 ======================================
 
-AHMED Daniel
-BAH Thierno
+- AHMED Daniel
+- BAH Thierno
 
 Sommaire 
 ========
