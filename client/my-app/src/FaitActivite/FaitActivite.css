@@ -1,7 +1,15 @@
 .total {
-	background: rgb(77, 181, 129) !important;
+	background: rgb(68, 152, 170) !important;
 }
 
 .sumTotal {
 	background: rgb(235, 140, 140) !important;
+}
+
+.rowTot {
+	background: rgb(68, 152, 170) !important;
+}
+
+.rowSTot {
+	background: rgb(40, 91, 138) !important;
 }

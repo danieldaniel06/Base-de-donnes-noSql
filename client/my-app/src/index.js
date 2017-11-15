@@ -6,6 +6,7 @@ import registerServiceWorker from './registerServiceWorker';
 import FaitActivite from './FaitActivite/FaitActivite';
 import Homme from './Homme/Homme';
 import Top10 from './Top10/Top10';
+import Budget from './Budget/Budget';
 
 class App extends React.Component {
 	render() {
@@ -16,6 +17,7 @@ class App extends React.Component {
 						<Route exact path="/" component={Homme} />
 						<Route exact path="/cubeInstAct" component={FaitActivite} />
 						<Route exact path="/topN" component={Top10} />
+						<Route exact path="/budget" component={Budget} />
 					</div>
 				</Router>
 			</div>

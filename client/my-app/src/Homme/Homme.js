@@ -12,6 +12,9 @@ class Homme extends React.Component {
 						<a href="/cubeInstAct">Cube sur la dimention installation et activite par année</a>
 					</li>
 					<li>
+						<a href="/budget">Rollup la dimention equipement, date et niveau</a>
+					</li>
+					<li>
 						<a href="/topN">Top N des activites pratiqué durant une période</a>
 					</li>
 				</ul>
