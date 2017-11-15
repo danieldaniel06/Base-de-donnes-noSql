@@ -92,3 +92,39 @@ Les faits numériques qui renseigne notre table de fait sont le nombre de specta
 
 ![alt tag](https://user-images.githubusercontent.com/16761554/32834842-4ff89538-ca04-11e7-8d76-a48fac7cd451.png)
 
+Nous obtenons le schéma ci-dessus. Nous avons choisis de la modifier un peu la table de fait, En effet sur mongodb, il y a deux manière de représenter un document “Embedded Documents” qui consiste à tout mettre dans un seul document ou “Database References” qui consiste en la séparation des tables en utilisant leurs clé pour les référencer comme en relationnel. Nous avons choisis “Embedded Document” pour une question de performance car pas besoin de faire une jointure entre deux document (elle est déjà faite en quelque sorte).
+La table de fait généré comporte : 383 723 documents.
+Un exemple d'un document dans notre table de fait :
+
+![alt tag](https://user-images.githubusercontent.com/16761554/32835132-437ad158-ca05-11e7-9f0b-b8a31b615d53.png)
+
+Requêtes
+========
+
+Visualisation de notre entrepôt de données avec NodeJS et React
+===============================================================
+
+Grâce à NodeJS, React et MongoDB nous avons pu générer une application web qui nous fournis un rendus html de notre entrepôt de donnée et des résultats de nos requêtes, les résultats sont ainsi plus agréable à parcourir, elles sont plus facilement lisible. 
+
+Annexe
+======
+
+- Site du gouvernement https://www.data.gouv.fr/fr/datasets/recensement-des-equipements-sportifs-espaces-et-sites-de-pratiques/
+
+- CSV
+  - fiches Installations: https://www.data.gouv.fr/s/resources/recensement-des-equipements-sportifs-espaces-et-sites-de-pratiques/20170817-165143/20170817_RES_FichesInstallations.zip
+
+  - fiches Equipements: https://www.data.gouv.fr/s/resources/recensement-des-equipements-sportifs-espaces-et-sites-de-pratiques/20170817-170027/20170817_RES_FichesEquipements.zip
+
+  - fiches Activités: https://www.data.gouv.fr/s/resources/recensement-des-equipements-sportifs-espaces-et-sites-de-pratiques/20170817-170202/20170817_RES_FichesEquipementsActivites.zip
+
+
+- JSON
+
+- Logiciel
+  - Talend : https://www.talend.com/products/data-integration/data-integration-open-studio/
+  - MongoDB: https://www.mongodb.com/fr
+  - MongoDB documentation : https://docs.mongodb.com/manual/
+  - NodeJS: https://nodejs.org/en/
+  - ReactJS: https://reactjs.org/
+
