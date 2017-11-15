@@ -1,6 +1,6 @@
-var activites = require('../jsonFiles/activites.json');
-var installation = require('../jsonFiles/installations.json');
-var equipements = require('../jsonFiles/equipements.json');
+var activites = require('../Files/jsonFiles/activites.json');
+var installation = require('../Files/jsonFiles/installations.json');
+var equipements = require('../Files/jsonFiles/equipements.json');
 
 writeFile = function(file, data) {
 	var fs = require('fs');
@@ -94,6 +94,6 @@ for (var i = 1000; i < activites.activites.length - 100000; i++) {
 	if (activites.activites[i] != {}) selected[i - 1000] = activites.activites[i];
 }
 
-var fait_activite_file_write = '/Users/danielahmed/Desktop/noSQLProject/jsonFiles/p/fait_activites_w.json';
+var fait_activite_file_write = '../Files/jsonFiles/fait_activites_w.json';
 
 writeFile(fait_activite_file_write, JSON.stringify(selected));
