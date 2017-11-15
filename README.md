@@ -90,3 +90,5 @@ Une ligne de notre table de fait représente donc un événement sportif, on a d
 Les dimensions que nous utilisons sont: Installations, Équipement, Date. 
 Les faits numériques qui renseigne notre table de fait sont le nombre de spectateurs, le nombre de participants, le coût d’un événement sportif et le budget prévus pour cet événement.
 
+![alt tag](https://user-images.githubusercontent.com/16761554/32834842-4ff89538-ca04-11e7-8d76-a48fac7cd451.png)
+
