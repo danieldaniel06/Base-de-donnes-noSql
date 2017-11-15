@@ -124,6 +124,31 @@ Un exemple d'un document dans notre table de fait :
 Requêtes
 ========
 
+Les requêtes sont toute dans le fichier "query" du git, nous allons expliquer seulement quelques requêtes dans cette partie du rapport
+
+  - budget.js 
+
+Cette requête est l'équivalent d’un GROUP BY ROLLUP, à partir de D dimensions nous obtenons D+1 niveaux d'agrégation, pour cette requête nos dimensions sont Departement, Date, et Niveau, l'information relative au niveau est dans la table de fait et celle relative au département est dans la table Equipement. 
+
+Nous obtenons quatres niveaux d'agrégats: le département, l'année, le niveau de l'événement et budget total. Cette requête permet de savoir le budget dépensé par année pour chaque département pour l'organisation des événements sportifs a tout niveau. On peut augmenter la granularité en effectuant un slice, de cette façon on peut avoir cette information que pour les activités de niveau "Scolaire" par exemple.
+
+  - requetes1.js
+  
+Cette requête est l'équivalent d’un GROUP BY CUBE, à partir de D dimensions nous obtenons 2^D niveaux d'agregation. En partant des dimensions Date et Installation nous obtenons quatres niveaux d'agregats.
+
+Ici selon l’activité et l’installation nous cherchons a avoir des informations sur les participants, leur nombres et leur profil, si c'est des hommes, des femmes etc...
+
+Cette requête peut aider à savoir comment adapter les installations par rapport aux personnes qui la fréquente par exemple.
+ 
+  - requetes3.js
+  
+Nous avons fait une requête qui nous donne les activités qui attire le plus de spectateurs en les filtrant par département et sur une période de temps, on fait un groupage par activité par date et par département. Nous pouvons voir par exemple lors de l’été 2015 c'est à dire de Juin à Septembre 2015, quelles sont les activités qui ont eu le plus de spectateur à Nantes et dans quelles installations. Cette requête est intéressante pour choisir par exemple quelles activités mettre en avant au fil des saisons et savoir quelle sont les installations où les gens vont le plus et ainsi décider de les améliorer, et mieux répartir le budget entre les installations du département.
+
+  - requetes4.js
+  
+Cette requête est une généralisation de la précédente, on veut avoir une analyse sur toute la France et non sur un seul département, ici on ne fait plus le filtrage par rapport au département et on peux faire une analyse sur un top 10 des événements sportifs qui ont rassemblés le plus de spectateur sur toute la France. Si on veut savoir qu’elle sont les installations les plus fréquentés dans la France lors de l'été 2015 ou de n'importe quelle autre période de temps.
+
+
 Visualisation de notre entrepôt de données avec NodeJS et React
 ===============================================================
 
