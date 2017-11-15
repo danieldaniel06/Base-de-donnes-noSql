@@ -79,6 +79,7 @@ Extraction, Nettoyage et Transformation des données avec Talend
 Pour “préparer” nos données nous avons utilisé le logiciel d'intégration de donnée Talend il est relativement simple et intuitif et grâce à lui nous avons pus mettre en entrée nos fichiers CSV et pouvoir choisir les données à extraire. Grâce à un mapping nous avons extrait les données puis nous avons changer les noms de ses données pour leur donner des noms plus cohérent et plus précis. Nous avons ensuite choisi de mettre nos données dans un fichier en format JSON à la sortie. Le format JSON est assez simple facile à comprendre et les types de données sont utilisées dans beaucoup de langage et surtout ce format nous était très utile pour pouvoir importer nos données dans MongoDB.
 
 Suite à cette étape nous avons quatres fichiers JSON qui vont être nos dimensions quand nous allons vouloir faire nos requêtes : Équipements, Installations, Date et Niveau. Nous avons créé pour la dimension Date aussi un fichier JSON qui contient les dates de tous les jours du 28/07/2005 au 28/07/2017 cette table vas nous être utiles lorsque nous allons créer notre table de fait et pour faire des analyses par rapport à des périodes de temps.
+
 Voici une image pour illustrer ce processus:
 
 ![alt tag](https://user-images.githubusercontent.com/16761554/32853119-8e302bf0-ca3a-11e7-942c-c8ba1465b943.png)
