@@ -1,0 +1,11 @@
+.pagination > li {
+	/* display: inline; */
+	float: left;
+	margin: 0 !important;
+	display: inline-grid;
+}
+
+.pagination > li > a {
+	/* display: inline; */
+	cursor: pointer;
+}
