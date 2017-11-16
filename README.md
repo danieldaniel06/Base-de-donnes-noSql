@@ -131,14 +131,10 @@ Les requêtes sont toute dans le fichier "query" du git.
 Cette requête est l'équivalent d’un GROUP BY ROLLUP, à partir de D dimensions nous obtenons D+1 niveaux d'agrégation, pour cette requête nos dimensions sont Departement, Date, et Niveau, l'information relative au niveau est dans la table de fait et celle relative au département est dans la table Equipement. 
 
 Nous obtenons quatres niveaux d'agrégats: le département, l'année, le niveau de l'événement et budget total. Cette requête permet de savoir le budget dépensé par année pour chaque département pour l'organisation des événements sportifs a tout niveau. On peut augmenter la granularité en effectuant un slice, de cette façon on peut avoir cette information que pour les activités de niveau "Scolaire" par exemple.
-
-  - budgetCom
-
-*explication*
   
   -budgetAgg
 
-*explication*
+Cette requête nous permet de faire une comparaison entre le budget pour un événement et son coût actuel lors de la réalisation de l'événement. Elle peut nous permettre de mieux ajuster les budgets en observant les informations a propos de ses activités ou calculer la marge entre le budget et le coup des événements.
   
   - requetes1.js
   
