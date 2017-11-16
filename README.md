@@ -5,13 +5,17 @@ Pré-requis
 
 - Avoir nodejs sur sa machine
 - Avoir mongodb sur sa machine
+<<<<<<< HEAD
 - Avoir la commande mongo accéssible directement en ligne de commande, pour tester : mongo --version
 - Avoir commande npm accéssible directement en ligne de commande, pour tester : npm --version
+=======
+>>>>>>> origin/master
 
 Installation
 ============
   
 - Faire un clone du projet avec la commmande git.
+<<<<<<< HEAD
 - Avec le terminal, placer vous dans le dossier qui vient d'être cloner.
 - Executer les commandes suivantes :
     - mkdir data
@@ -33,6 +37,27 @@ Installation
     - http://localhost:3000/api/fait_activites/topNSpectPart/:n/:dateDeb/:dateFin (! :n, :dateDep, :dateFin à définir)
     - http://localhost:3000/api/fait_activites/cubeBudgetCoutDepAnneeNiveau/:niveau? (! :niveau à définir)
     - http://localhost:3000/api/fait_activites/cubeInstDate/:year? (! :year à définir)
+=======
+- Placer vous dans le dossier qui vient d'être cloner.
+- Taper la commande suivantes :
+    - npm install
+- Une fois les dépendances installées, importer la base des faits avec la commande suivante :
+    - mongoimport --db \<nom base de donnees\> --collection \<nom de la collection\> --drop --file jsonFiles/fait_activites_w.json --jsonArray
+    - Ouvrir le fichier global.js et modifier les paramètres 
+        - dbName : \<nom base de donnees\>
+        - faitCollection : \<nom de la collection\>
+- Tapper les commandes suivantes :
+    - npm install -g nodemon
+    - Une fois nodemon installé, taper : nodemon app
+- Aller dans votre navigateur préféré et tapper : http://localhost:3000
+- Les services disponible pour le moment sont :
+    - http://localhost:3000/api/fait_activites
+    - http://localhost:3000/api/fait_activites/groupInst
+    - http://localhost:3000/api/fait_activites/groupInst/:year , remplacer :year par une annee
+    - http://localhost:3000/api/fait_activites/groupAct
+    - http://localhost:3000/api/fait_activites/groupAct/:year, remplacer :year par une annee
+    - http://localhost:3000/api/fait_activites/groupInstAct
+>>>>>>> origin/master
   
 
 
@@ -57,11 +82,19 @@ Sommaire
 Introduction
 ============
 
+<<<<<<< HEAD
 L'objectif de ce projet était de réaliser un entrepôt de données, c'est-à-dire une structure qui a pour but, contrairement aux bases de données “classique”, de regrouper les données d'une entreprise pour des fins analytiques et pour l'aide à la décision stratégique, action entreprise par les décideurs de l'entreprise qui vise à améliorer, quantitativement ou qualitativement, la performance de l'entreprise. C'est un puissant outil d'aide à la décision. 
 
 Pour ce projet on a choisi de se mettre à la place d’une organisation qui aide l'etat à gérer sont budget pour tout ce qui concerne le sport en France, les activités sportives, les installations, les équipements.
 
 Pour trouver des information relatives aux installations sportives dans toute la France nous sommes aller sur le site du gouvernement et nous avons sélectionné trois jeux de données qui vont nous servir à faire notre entrepôt de données. Nous allons tout d’abord décrire nos jeux de données puis expliquer comment on a fait pour construire cet entrepôt avec les outils utilisés.
+=======
+L'objectif de ce projet était de réaliser un entrepôt de données, c’est à dire une structure qui a pour but, contrairement aux bases de données “classique”, de regrouper les données d’une entreprise pour des fins analytiques et pour aider à la décision stratégique, action entreprise par les décideurs de l'entreprise qui vise à améliorer, quantitativement ou qualitativement, la performance de l'entreprise. C’est un puissant outil d’aide à la décision.
+
+Pour ce projet on a choisi de se mettre à la place d’une organisation qui aide l'etat à gérer sont budget pour tout ce qui concerne le sport en France, les activités sportives, les installations, les équipements.
+
+Pour trouver des information relatives aux installations sportives dans toute la France nous sommes aller sur le site du gouvernement et nous avons sélectionné trois jeux de données qui vont nous servir à faire notre entrepôt de données. Nous allons tout d’abord décrire nos jeux de données puis expliquer comment a fait pour construire cet entrepôt avec les outils utilisés.
+>>>>>>> origin/master
 
 Description des données sources
 ===============================
@@ -73,7 +106,11 @@ La fiche “installations” nous donne toute sortes d’informations sur l’in
 
 La fiche “équipements” nous donne des informations sur les équipements sportifs comme son nom, l’installation dans lequel on le trouve, sa matière, sa date de création etc..
 
+<<<<<<< HEAD
 La fiche “activités des fiches équipements” nous donne des informations sur les activités, leur noms, le niveau, la nature de l’activité si elle est scolaire. 
+=======
+La fiche “activités des fiches équipements” nous donne des informations sur les activités, leur noms, le niveau, la nature de l’activité si elle est scolaire ou pas par exemple. 
+>>>>>>> origin/master
 
 Cette dernière fiche recense les “événement sportif qui ont eu lieux dans les installations” mais pas avec beaucoup de détails comme le nombres de spectateurs, le nombres de participants, le budget alloué, le coût actuel de l'événement. Ses données étaient introuvables et pourtant elles étaient importante pour nous permettre de faire des analyses pertinente alors nous avons dû les créer nous même, ce qui sera expliquer un peu plus tard.
 
@@ -132,6 +169,7 @@ Les requêtes sont toute dans le fichier "query" du git.
 
   - budget.js 
 
+<<<<<<< HEAD
 Cette requête est l'équivalent d’un GROUP BY ROLLUP, à partir de D dimensions nous obtenons D+1 niveaux d'agrégation, pour cette requête nos dimensions sont Departement, Date, et Niveau, l'information relative au niveau est dans le document de fait et celle relative au département est dans le document Equipement. 
 
 Nous obtenons quatres niveaux d'agrégats: le département, l'année, le niveau de l'événement et budget total. Cette requête permet de savoir le budget dépensé par année pour chaque département pour l'organisation des événements sportifs a tout niveau. On peut augmenter la granularité en effectuant un slice, de cette façon on peut avoir cette information que pour les activités de niveau "Scolaire" par exemple.
@@ -143,6 +181,15 @@ Cette requête présente la même logique que la précédente, mais ici nous avo
   - budgetAgg
 
 Ici nous avons repris les deux requettes précédentes en utilisant l'opérateur agréggate. Le but étant des faire des tests de perfomance comme on à un jeux de données assez importante. En effet dans notre table de fait, nous avons 383 723 documents dont chaque document représente une ligne de notre table de fait sous la forme d'agrégat.
+=======
+Cette requête est l'équivalent d’un GROUP BY ROLLUP, à partir de D dimensions nous obtenons D+1 niveaux d'agrégation, pour cette requête nos dimensions sont Departement, Date, et Niveau, l'information relative au niveau est dans la table de fait et celle relative au département est dans la table Equipement. 
+
+Nous obtenons quatres niveaux d'agrégats: le département, l'année, le niveau de l'événement et budget total. Cette requête permet de savoir le budget dépensé par année pour chaque département pour l'organisation des événements sportifs a tout niveau. On peut augmenter la granularité en effectuant un slice, de cette façon on peut avoir cette information que pour les activités de niveau "Scolaire" par exemple.
+  
+  -budgetAgg
+
+Cette requête nous permet de faire une comparaison entre le budget pour un événement et son coût actuel lors de la réalisation de l'événement. Elle peut nous permettre de mieux ajuster les budgets en observant les informations a propos de ses activités ou calculer la marge entre le budget et le coup des événements.
+>>>>>>> origin/master
   
   - requetes1.js
   

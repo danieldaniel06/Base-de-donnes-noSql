@@ -483,7 +483,6 @@ module.exports.getTotatGroupActInst = function(callback, year) {
 	FaitActivite.aggregate(query).exec(callback);
 };
 
-
 module.exports.budgetGroupDepAnneeNiveau = function(callback, niveau) {
 	var query = [
 		{
