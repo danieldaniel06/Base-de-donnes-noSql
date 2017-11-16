@@ -90,6 +90,8 @@ Voici une image pour illustrer ce processus d'extraction de nettoyage et de tran
 
 ![alt tag](https://user-images.githubusercontent.com/16761554/32853119-8e302bf0-ca3a-11e7-942c-c8ba1465b943.png)
 
+![alt tag](/Users/danielahmed/Desktop/Capture\ d’écran\ 2017-11-15\ à\ 19.19.58.png)
+
 Stockage des données avec MongoDB
 =================================
 
