@@ -13,10 +13,10 @@ Installation
   
 - Faire un clone du projet avec la commmande git.
 - Avec le terminal, placer vous dans le dossier qui vient d'être cloner et lancer la commande make.
+- Une fois les deux processus précédentes terminés vous devez avoir sur le terminal :
+    - Running on port 3001... we're connected!
 - Ouvrir un autre terminal sur le repertoir courant et placez vous dans le dossier client/build avec la commande : cd client/build
     - Executer make
-- Une fois les deux processus précédentes terminés, dans le deuxième terminal vous devez avoir :
-    - Running on port 3001... we're connected!
 - Aller dans votre navigateur préféré et tapper : http://localhost:8000
 
 - Les services disponible pour le moment au niveau du serveur sont :

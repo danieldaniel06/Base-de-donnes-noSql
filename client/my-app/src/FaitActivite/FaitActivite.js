@@ -25,7 +25,7 @@ class FaitActivite extends React.Component {
 		Request.get(url).then(res => {
 			this.setState({ exampleItems: JSON.parse(res.text) });
 		});
-		console.log(url);
+		//console.log(url);
 	};
 
 	componentDidMount() {
