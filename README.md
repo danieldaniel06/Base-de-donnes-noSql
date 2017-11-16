@@ -12,18 +12,11 @@ Installation
 ============
   
 - Faire un clone du projet avec la commmande git.
-- Avec le terminal, placer vous dans le dossier qui vient d'être cloner.
-- Executer les commandes suivantes :
-    - mkdir data
-    - mkdir data/db
-    - mongod --dbpath data/db --logpath log.txt
-- Ouvrir un autre terminal sur le repertoir courant et lancer : make
-- Ouvrir un autre terminal sur le repertoir courant et placé vous dans serveur avec un "cd serveur"
+- Avec le terminal, placer vous dans le dossier qui vient d'être cloner et lancer la commande make.
+- Ouvrir un autre terminal sur le repertoir courant et placez vous dans le dossier client/build avec la commande : cd client/build
     - Executer make
 - Une fois les deux processus précédentes terminés, dans le deuxième terminal vous devez avoir :
-    - Running on port 3000... we're connected!
-- Avec le premier terminal, placez vous dans le dossier client/build avec la commande : cd client/build
-    - Executer make
+    - Running on port 3001... we're connected!
 - Aller dans votre navigateur préféré et tapper : http://localhost:8000
 
 - Les services disponible pour le moment au niveau du serveur sont :
@@ -90,7 +83,6 @@ Voici une image pour illustrer ce processus d'extraction de nettoyage et de tran
 
 ![alt tag](https://user-images.githubusercontent.com/16761554/32853119-8e302bf0-ca3a-11e7-942c-c8ba1465b943.png)
 
-![alt tag](/Users/danielahmed/Desktop/Capture\ d’écran\ 2017-11-15\ à\ 19.19.58.png)
 
 Stockage des données avec MongoDB
 =================================
