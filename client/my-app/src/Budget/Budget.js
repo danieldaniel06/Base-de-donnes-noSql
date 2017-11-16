@@ -23,8 +23,8 @@ class Budget extends React.Component {
 
 	getGroupCube = function(niveau) {
 		var url = niveau
-			? 'http://localhost:3000/api/fait_activites/cubeBudgetCoutDepAnneeNiveau/' + niveau
-			: 'http://localhost:3000/api/fait_activites/cubeBudgetCoutDepAnneeNiveau/';
+			? 'http://localhost:3001/api/fait_activites/cubeBudgetCoutDepAnneeNiveau/' + niveau
+			: 'http://localhost:3001/api/fait_activites/cubeBudgetCoutDepAnneeNiveau/';
 		Request.get(url).then(res => {
 			this.setState({ cube: JSON.parse(res.text), exampleItems: JSON.parse(res.text) });
 			//console.log(res.text);
@@ -167,7 +167,6 @@ class Budget extends React.Component {
 			<div>
 				<div>
 					<h2>Budget dépensé par département pour les événements sportifs par année</h2>
-					<h3>Possibilité de filtrer par niveau</h3>
 					<div class="form-group">
 						<label for="sel1">Selectioner un niveau:</label>
 						<select

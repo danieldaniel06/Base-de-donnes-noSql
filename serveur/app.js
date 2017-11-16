@@ -87,6 +87,7 @@ app.get('/api/fait_activites/statBudgetCommAnne/:niveau?', function(req, res) {
 
 
 app.get('/api/fait_activites/topNSpectPart/:n/:dateDeb/:dateFin', function(req, res) {
+	console.log("topN")
 	var dateDeb = new Date(req.params.dateDeb);
 	var dateFin = new Date(req.params.dateFin);
 	FaitActivite.getTopNSpectateurAct(
@@ -234,5 +235,5 @@ app.get('/api/fait_activites/cubeInstDate/:year?', function(req, res) {
 	}, year);
 });
 
-app.listen(3000);
-console.log('Running on port 3000...');
+app.listen(3001);
+console.log('Running on port 3001...');

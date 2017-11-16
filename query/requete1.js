@@ -1,5 +1,5 @@
 /**
- * L'enssemble de ces requête nous permet de faire un cube OLAP sur deux dimentions qui sont : date et Installation
+ * L'enssemble de ces requêtes nous permetent de faire un cube OLAP sur deux dimentions qui sont : date et Installation
  * Ici nous cherchons à savoir quelle est le nombre de participant selon différentes dimension sur une année
  */
 

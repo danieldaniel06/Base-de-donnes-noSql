@@ -22,8 +22,8 @@ class BudgetCom extends React.Component {
 
 	getGroupRollup = function(niveau) {
 		var url = niveau
-			? 'http://localhost:3000/api/fait_activites/statBudgetCommAnne/' + niveau
-			: 'http://localhost:3000/api/fait_activites/statBudgetCommAnne/';
+			? 'http://localhost:3001/api/fait_activites/statBudgetCommAnne/' + niveau
+			: 'http://localhost:3001/api/fait_activites/statBudgetCommAnne/';
 		Request.get(url).then(res => {
 			this.setState({ exampleItems: JSON.parse(res.text) });
 		});

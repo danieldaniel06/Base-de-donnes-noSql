@@ -26,7 +26,7 @@ class Top10 extends React.Component {
 
 	getTopNSectAct = function() {
 		var url =
-			'http://localhost:3000/api/fait_activites/topNSpectPart/' +
+			'http://localhost:3001/api/fait_activites/topNSpectPart/' +
 			(this.refs.query.value ? this.refs.query.value : 10) +
 			'/' +
 			this.state.startDate.format() +
