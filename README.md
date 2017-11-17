@@ -273,23 +273,7 @@ var rollupBudgetDepAnneeNiveau = function(niveau) {
 	db.fait_activites.aggregate(query).forEach(printjson);
 };
 
-/**
- * Ici nous avons une requête qui est sur trois dimentions (equipement, date, niveau)
- * Cette requête représente un Rollup. C'est dans la même logique que la précedente mais ici nous faisons un drill-down
- * (nous passons de departement à commune) ce qui fait que nous avons plus de détails.
- * Nous voulons savoir ici l'évolution du budget aloué/ cout généré des activités sprtifs par commune, année, niveau;
- * par commune, année; par commune et le total du budget/cout
- * 
- * 
- * Execution sur mongo :
- * 		- Se place dans le fichier query avec le terminal
- * 		- Lancer mongo
- * 		- Se placer dans la base de données ou se trouve la collection
- * 		- Faire load('budgetAgg.js')
- * 		- Faire rollupBudgetCommAnneeNiveau(niveau) niveau étatant un paramètre
- * 
- * @param {*} niveau 
- */
+
 
 var rollupBudgetCommAnneeNiveau = function(niveau) {
 	var query = [
@@ -634,7 +618,6 @@ db.fait_activites.mapReduce(mapNbActDep, reduceNbActDep, {
 	query: query
 });
 
-db.statNbActDep.find().forEach(printjson);
 ```
 
 Visualisation de notre entrepôt de données avec NodeJS et React
