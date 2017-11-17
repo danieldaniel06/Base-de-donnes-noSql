@@ -168,7 +168,7 @@ class Budget extends React.Component {
 				<div>
 					<h2>Budget dépensé par département pour les événements sportifs par année</h2>
 					<div class="form-group">
-						<label for="sel1">Selectioner un niveau:</label>
+						<label for="sel1">Sélectionner un niveau:</label>
 						<select
 							onChange={e => {
 								this.refresh(e);
@@ -190,10 +190,10 @@ class Budget extends React.Component {
 					<table className="table table-striped">
 						<tbody>
 							<tr>
-								<th>Departement</th>
+								<th>Département</th>
 								<th>Année</th>
 								<th>Niveau</th>
-								<th>Total budget</th>
+								<th>Budget total</th>
 							</tr>
 							{budgets}
 						</tbody>

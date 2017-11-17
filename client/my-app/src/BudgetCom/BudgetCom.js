@@ -112,10 +112,9 @@ class BudgetCom extends React.Component {
 		return (
 			<div>
 				<div>
-					<h2>Budget dépensé par département pour les événements sportifs par année</h2>
-					<h3>Possibilité de filtrer par niveau</h3>
+					<h2>Budget dépensé/ coût généré par département pour les événements sportifs par année</h2>
 					<div class="form-group">
-						<label for="sel1">Selectioner un niveau:</label>
+						<label for="sel1">Sélectionner un niveau:</label>
 						<select
 							onChange={e => {
 								this.refresh(e);
@@ -138,8 +137,8 @@ class BudgetCom extends React.Component {
 							<tr>
 								<th>Département</th>
 								<th>Année</th>
-								<th>Total budget</th>
-								<th>Total cout</th>
+								<th>Budget total</th>
+								<th>Coût total</th>
 							</tr>
 							{budgets}
 						</tbody>

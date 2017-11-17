@@ -170,9 +170,9 @@ class BudgetDep extends React.Component {
 
 			return (
 				<div className="col-md-4">
-					<h3>
-						Eévolution du budget/coût des activités par année du département {object.dep}
-					</h3>
+					<h5>
+						Évolution du budget/ coût des activités par année du département {object.dep}
+					</h5>
 					<Bar data={object.data} options={options} />
 				</div>
 			);
@@ -250,7 +250,7 @@ class BudgetDep extends React.Component {
 			<div>
 				<div>
 					<h2>
-						Budget dépensé par département pour les événements sportifs par année et le coût associé au
+						Budget dépensé / coût généré par département pour les événements sportifs par année et le coût associé aux
 						événements
 					</h2>
 					<div class="form-group">
@@ -278,8 +278,8 @@ class BudgetDep extends React.Component {
 							<tr>
 								<th>Département</th>
 								<th>Année</th>
-								<th>Total budget</th>
-								<th>Total cout</th>
+								<th>Budget total</th>
+								<th>Coût total</th>
 							</tr>
 							{budgets}
 						</tbody>

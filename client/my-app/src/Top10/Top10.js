@@ -117,8 +117,8 @@ class Top10 extends React.Component {
 					<table className="table table-striped">
 						<tbody>
 							<tr>
-								<th>Nom Activite</th>
-								<th>Total spectateurs</th>
+								<th>Nom activité</th>
+								<th>Total spéctateurs</th>
 							</tr>
 							{resultat}
 						</tbody>
