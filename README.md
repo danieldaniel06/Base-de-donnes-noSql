@@ -13,14 +13,14 @@ Installation
   
 - Faire un clone du projet avec la commmande : 
   - git clone https://github.com/danieldaniel06/Base-de-donnes-noSql.git
-- Avec le terminal, placer vous dans le dossier qui vient d'être cloner et lancer la commande make.
+- Avec le terminal, placez-vous dans le dossier qui vient d'être cloné et lancer la commande make.
 - Une fois terminé vous devez avoir sur le terminal :
     - Running on port 3001... we're connected!
-- Ouvrir un autre terminal sur le repertoir courant et placez vous dans le dossier client/build avec la commande : cd client/build
+- Ouvrir un autre terminal sur le répertoire courant et placez-vous dans le dossier client/build avec la commande : cd client/build
     - Executer make
 - Aller dans votre navigateur préféré et tapper : http://localhost:8000
 
-- Les services disponible pour le moment au niveau du serveur sont :
+- Les services disponibles pour le moment au niveau du serveur sont :
     - http://localhost:3000/api/fait_activites
     - http://localhost:3000/api/fait_activites/statBudgetDepAnne/:niveau (! :niveau à définir)
     - http://localhost:3000/api/fait_activites/statBudgetCommAnne/:niveau (! :niveau à définir)
