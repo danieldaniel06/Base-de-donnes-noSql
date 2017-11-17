@@ -29,9 +29,40 @@ Installation
     - http://localhost:3000/api/fait_activites/cubeInstDate/:year? (! :year à définir)
   
 
+# Tutoriel pour lancer l'application sur Windows 10
 
-Compte Rendus du Projet Base de donnée
-======================================
+Pré-requis
+==========
+
+- Avoir nodejs sur sa machine : https://nodejs.org/en/
+- Avoir mongodb sur sa machine : https://www.mongodb.com
+- Avoir php sur sa machine : http://php.net/downloads.php
+- Avoir cygwin pour pouvoir utiliser un terminal sous linux : https://cygwin.com/install.html
+
+Installation
+============
+
+- Lors de la configuration de cygwin choisir l'installation des commandes : unzip, make, mkdir
+- Déclarer des variables d'environnement pour pouvoir utiliser mongo et php dans le terminal:
+  - Aller sur le Panneau de configuration, puis dans Système et sécurité puis dans Système
+  - Cliquez sur le lien Paramètres système avancés.
+  - Cliquez sur Variables d'environnement. Dans la section Variables système, recherchez la variable d'environnement PATH et sélectionnez-la. Cliquez sur Modifier. Si la variable d'environnement PATH n'existe pas, cliquez sur Nouvelle.
+  - Dans la fenêtre Modifier la variable système (ou Nouvelle variable système), indiquez la valeur de la variable d'environnement PATH. Cliquez sur OK. Fermez toutes les fenêtres restantes en cliquant sur OK.
+    - la valeur de la variable d'environnement pour mongo est le chemin jusqu'au fichier bin
+    - la valeur de la variable d'environnement pour php est le chemin jusqu'au dossier que vous avez téléchargé
+  - Tester vos commande en tapant "mongo --help" ou "php --help" dans le terminal cygwin 
+- Faire un clone du projet avec la commande : 
+  - git clone https://github.com/danieldaniel06/Base-de-donnes-noSql.git
+- Avec le terminal cygwin, placez-vous dans le dossier qui vient d'être cloné en le faisant simplement glisser sur le terminal pour avoir son chemin.
+- exécuter la commande make
+
+- Une fois terminé vous devez avoir sur le terminal :
+    - Running on port 3001... we're connected!
+- Ouvrir un autre terminal cygwin sur le répertoire courant et placez-vous dans le dossier client/build avec la commande : cd client/build
+    - Executer make
+- Aller dans votre navigateur préféré et tapper : http://localhost:8000
+
+# Compte Rendus du Projet Base de donnée
 
 - AHMED Daniel
 - BAH Thierno
