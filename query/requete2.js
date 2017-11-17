@@ -56,5 +56,3 @@ db.fait_activites.mapReduce(mapGroupInst, reduceGroupInst, {
 		'date.year': 2010
 	}
 });
-
-//db.cubeInstAct.find().forEach(printjson);

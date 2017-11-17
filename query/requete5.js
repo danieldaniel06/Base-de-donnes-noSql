@@ -24,5 +24,3 @@ db.fait_activites.mapReduce(mapNbActDep, reduceNbActDep, {
 	out: { inline: 1 },
 	query: query
 });
-
-db.statNbActDep.find().forEach(printjson);
