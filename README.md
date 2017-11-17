@@ -142,14 +142,202 @@ L'information relative au niveau est dans le document de fait et celle relative 
 
 Nous obtenons quatre niveaux d'agrégats: le département, l'année, le niveau de l'événement et budget total. Cette requête permet de savoir le budget dépensé par année pour chaque département pour l'organisation des événements sportifs à tout niveau. On peut augmenter la granularité en effectuant un slice, de cette façon on peut avoir cette information que pour les activités de niveau "Scolaire" par exemple.
 
+```javascript
+
+var mapDepDate = function() {
+	var equipement = this.equipement;
+	var date = this.date;
+	if (equipement && date) {
+		emit(
+			{ libDep: equipement.libDep, annee: date.year, niveau: this.niveau },
+			{ totalBudget: this.budget, totalCoup: this.cout }
+		);
+		emit({ libDep: equipement.libDep, annee: date.year }, { totalBudget: this.budget, totalCoup: this.cout });
+		emit({ libDep: equipement.libDep }, { totalBudget: this.budget, totalCoup: this.cout });
+		emit(null, { totalBudget: this.budget, totalCoup: this.cout });
+	}
+};
+
+var reduceDepDate = function(key, budgets) {
+	var totalBudget = 0;
+	var totalCoup = 0;
+	budgets.forEach(function(budget) {
+		if (budget.totalBudget) totalBudget += parseFloat(budget.totalBudget);
+		if (budget.totalCoup) totalCoup += parseFloat(budget.totalCoup);
+	});
+
+	return {
+		totalBudget: totalBudget,
+		totalCoup: totalCoup
+	};
+};
+
+db.fait_activites.mapReduce(mapDepDate, reduceDepDate, {
+	out: { inline: 1 },
+	query: {
+		niveau: 'Scolaire'
+	}
+});
+
+
+```
+
   - budgetCom
 
 Cette requête présente la même logique que la précédente, mais ici nous avons effectué un drill down qui nous permet d'avoir plus de détails sur la répartition des budgets non plus par département mais par commune.
-  
+
+```javascript
+var mapComDate = function() {
+	var date = this.date;
+	var equipement = this.equipement;
+	if (equipement && date) {
+		emit(
+			{ commune: equipement.libCom, annee: date.year, niveau: this.niveau },
+			{ totalBudget: this.budget, totalCoup: this.cout }
+		);
+		emit({ commune: equipement.libCom, annee: date.year }, { totalBudget: this.budget, totalCoup: this.cout });
+		emit({ commune: equipement.libCom }, { totalBudget: this.budget, totalCoup: this.cout });
+		emit(null, { totalBudget: this.budget, totalCoup: this.cout });
+	}
+};
+
+var reduceComDate = function(key, budgets) {
+	var totalBudget = 0;
+	var totalCoup = 0;
+	budgets.forEach(function(budget) {
+		if (budget.totalBudget) totalBudget += parseFloat(budget.totalBudget);
+		if (budget.totalCoup) totalCoup += parseFloat(budget.totalCoup);
+	});
+
+	return {
+		totalBudget: totalBudget,
+		totalCoup: totalCoup
+	};
+};
+
+db.fait_activites.mapReduce(mapComDate, reduceComDate, {
+	out: { inline: 1 },
+	query: {
+		niveau: 'Scolaire'
+	}
+});
+```
   - budgetAgg
 
 Ici nous avons repris les deux requêtes précédentes en utilisant l'opérateur agrégat. Le but était de faire des tests de performance comme on a un jeu de données assez importantes. En effet dans notre table de fait, nous avons 383 723 documents dont chaque document représente une ligne de notre table de fait sous la forme d'agrégat.
-  
+
+```javascript
+var rollupBudgetDepAnneeNiveau = function(niveau) {
+	var query = [
+		{
+			$match: { niveau: niveau }
+		},
+		{
+			$project: {
+				libDep: '$equipement.libDep',
+				annee: '$date.year',
+				budget: '$budget',
+				niveau: '$niveau',
+				cout: '$cout'
+			}
+		},
+		{
+			$group: {
+				_id: {
+					libDep: '$libDep',
+					annee: '$annee',
+					niveau: '$niveau'
+				},
+				totalBudget: {
+					$sum: '$budget'
+				},
+				totalCout: {
+					$sum: '$cout'
+				}
+			}
+		}
+	];
+
+	db.fait_activites.aggregate(query).forEach(printjson);
+
+	delete query[2].$group._id.niveau;
+
+	db.fait_activites.aggregate(query).forEach(printjson);
+
+	delete query[2].$group._id.annee;
+
+	db.fait_activites.aggregate(query).forEach(printjson);
+
+	query[2].$group._id = false;
+
+	db.fait_activites.aggregate(query).forEach(printjson);
+};
+
+/**
+ * Ici nous avons une requête qui est sur trois dimentions (equipement, date, niveau)
+ * Cette requête représente un Rollup. C'est dans la même logique que la précedente mais ici nous faisons un drill-down
+ * (nous passons de departement à commune) ce qui fait que nous avons plus de détails.
+ * Nous voulons savoir ici l'évolution du budget aloué/ cout généré des activités sprtifs par commune, année, niveau;
+ * par commune, année; par commune et le total du budget/cout
+ * 
+ * 
+ * Execution sur mongo :
+ * 		- Se place dans le fichier query avec le terminal
+ * 		- Lancer mongo
+ * 		- Se placer dans la base de données ou se trouve la collection
+ * 		- Faire load('budgetAgg.js')
+ * 		- Faire rollupBudgetCommAnneeNiveau(niveau) niveau étatant un paramètre
+ * 
+ * @param {*} niveau 
+ */
+
+var rollupBudgetCommAnneeNiveau = function(niveau) {
+	var query = [
+		{
+			$match: { niveau: niveau }
+		},
+		{
+			$project: {
+				libCom: '$equipement.libCom',
+				annee: '$date.year',
+				budget: '$budget',
+				niveau: '$niveau',
+				cout: '$cout'
+			}
+		},
+		{
+			$group: {
+				_id: {
+					libCom: '$libCom',
+					annee: '$annee',
+					niveau: '$niveau'
+				},
+				totalBudget: {
+					$sum: '$budget'
+				},
+				totalCout: {
+					$sum: '$cout'
+				}
+			}
+		}
+	];
+
+	db.fait_activites.aggregate(query).forEach(printjson);
+
+	delete query[2].$group._id.niveau;
+
+	db.fait_activites.aggregate(query).forEach(printjson);
+
+	delete query[2].$group._id.annee;
+
+	db.fait_activites.aggregate(query).forEach(printjson);
+
+	query[2].$group._id = false;
+
+	db.fait_activites.aggregate(query).forEach(printjson);
+};
+```
+
   - requetes1.js
   
 Cette requête est l'équivalent d’un GROUP BY CUBE, à partir de D dimensions nous obtenons 2^D niveaux d'agrégation. En partant des dimensions Date et Installation nous obtenons quatre niveaux d'agrégats.
@@ -157,24 +345,297 @@ Cette requête est l'équivalent d’un GROUP BY CUBE, à partir de D dimensions
 Ici selon l’activité et l’installation nous cherchons à avoir des informations sur les participants, leur nombre et leur profil, si c'est des hommes, des femmes etc.
 Cette requête peut aider à savoir comment adapter les installations par rapport aux personnes qui la fréquentent par exemple.
 
+```javascript
+var year = 2017;
+
+var query = [
+	{
+		$project: {
+			nomInst: '$installation.nomInst',
+			nbSpectateursHomme: '$nbSpectateursHomme',
+			nbSpectateursFemme: '$nbSpectateursFemme',
+			nbParticipantsHomme: '$nbParticipantsHomme',
+			nbParticipantsFemme: '$nbParticipantsFemme',
+			mois: '$date.month',
+			year: '$date.year'
+		}
+	},
+	{
+		$match: { $and: [{ year: year }, { nomInst: { $ne: null } }] }
+	},
+	{
+		$group: {
+			_id: {
+				nomInst: '$nomInst',
+				mois: '$mois'
+			},
+			sumNbParticipantsHomme: {
+				$sum: '$nbParticipantsHomme'
+			},
+			sumNbParticipantsFemme: {
+				$sum: '$nbParticipantsFemme'
+			},
+			sumNbSpectateursHomme: {
+				$sum: '$nbSpectateursHomme'
+			},
+			sumNbSpectateursFemme: {
+				$sum: '$nbSpectateursFemme'
+			}
+		}
+	},
+	{
+		$project: {
+			totalParticipantsHomme: '$sumNbParticipantsHomme',
+			totalParticipantsFemme: '$sumNbParticipantsFemme',
+			totalParticipants: {
+				$sum: ['$sumNbParticipantsHomme', '$sumNbParticipantsFemme']
+			},
+			totalSpectateursHomme: '$sumNbSpectateursHomme',
+			totalSpectateursFemme: '$sumNbSpectateursFemme',
+			totalSpectateurs: {
+				$sum: ['$sumNbSpectateursHomme', '$sumNbSpectateursFemme']
+			},
+			total: {
+				$sum: [
+					'$sumNbSpectateursHomme',
+					'$sumNbSpectateursFemme',
+					'$sumNbParticipantsHomme',
+					'$sumNbParticipantsFemme'
+				]
+			}
+		}
+	}
+];
+
+db.fait_activites.aggregate(query).forEach(printjson);
+
+delete query[2].$group._id.mois;
+
+db.fait_activites.aggregate(query).forEach(printjson);
+
+delete query[2].$group._id.nomInst;
+query[2].$group._id.mois = '$mois';
+
+db.fait_activites.aggregate(query).forEach(printjson);
+
+query[2].$group._id = false;
+
+db.fait_activites.aggregate(query).forEach(printjson);
+```
+
   - requete2.js
   
 Cette requête est la même que la précédente. MongoDB nous donne deux façons de faire cette requête une en utilisant d’énormes suites de query pour faire un groupage ou une plus sobre qui passe par l’utilisation d’un Map Reduce, nous avons pu observer une différence de performance.
 
 Map traverse tous les documents de notre table de fait et va pousser des informations à reduce selon une clé définit cette opération met plus de temps que la première version de cette requête.
 
+```javascript
+
+var mapGroupInst = function() {
+	var inst = this.installation;
+	var date = this.date;
+	if (inst && date) {
+		emit(
+			{ nomInst: inst.nomInst, month: date.month },
+			{
+				totalParticipantsHomme: this.nbParticipantsHomme,
+				totalParticipantsFemme: this.nbParticipantsFemme
+			}
+		);
+		emit(
+			{ nomInst: inst.nomInst },
+			{
+				totalParticipantsHomme: this.nbParticipantsHomme,
+				totalParticipantsFemme: this.nbParticipantsFemme
+			}
+		);
+		emit(
+			{ month: date.month },
+			{
+				totalParticipantsHomme: this.nbParticipantsHomme,
+				totalParticipantsFemme: this.nbParticipantsFemme
+			}
+		);
+
+		emit(null, {
+			totalParticipantsHomme: this.nbParticipantsHomme,
+			totalParticipantsFemme: this.nbParticipantsFemme
+		});
+	}
+};
+
+var reduceGroupInst = function(key, values) {
+	var reducedVal = { totalParticipants: 0 };
+	var totalParticipantsHomme = 0;
+	var totalParticipantsFemme = 0;
+
+	values.forEach(function(value) {
+		if (value.totalParticipantsHomme) totalParticipantsHomme += parseInt(value.totalParticipantsHomme);
+		if (value.totalParticipantsFemme) totalParticipantsFemme += parseInt(value.totalParticipantsFemme);
+	});
+	reducedVal.totalParticipants += totalParticipantsHomme + totalParticipantsFemme;
+	return reducedVal;
+};
+
+db.fait_activites.mapReduce(mapGroupInst, reduceGroupInst, {
+	out: { inline: 1 },
+	query: {
+		'date.year': 2010
+	}
+});
+
+```
+
   - requetes3.js
   
 Nous avons fait une requête qui nous donne les activités qui attirent le plus de spectateurs en les filtrant par département et sur une période de temps, on fait un groupage par activité par date et par département. Nous pouvons voir par exemple lors de l’été 2015 c'est-à-dire de Juin à septembre 2015, quelles sont les activités qui ont eu le plus de spectateur à Nantes et dans quelles installations. Cette requête est intéressante pour choisir par exemple quelles activités mettre en avant au fil des saisons et savoir quelle est les installations où les gens vont le plus et ainsi décider de les améliorer, et mieux répartir le budget entre les installations du département.
+
+```javascript
+
+var query = [
+	{
+		$project: {
+			nivActivite: '$niveau',
+			nomActivite: '$libAct',
+			codeDep: '$installation.codeDep',
+			nomIns: '$installation.nomInst',
+
+			month: '$date.month',
+			year: '$date.year',
+			specTotal: { $sum: ['$nbSpectateursHomme', '$nbSpectateursHomme'] }
+		}
+	},
+	{
+		$match: {
+			$and: [
+				{
+					month: {
+						$gte: 5,
+						$lte: 10
+					}
+				},
+				{
+					year: 2015
+				}
+			]
+		}
+	},
+	{
+		$group: {
+			_id: {
+				niveau: '$nivActivite',
+				nomActivite: '$nomActivite',
+				dep: '$codeDep',
+				mois: '$month',
+				annee: '$year'
+			},
+			NbSpectateursTotaux: { $sum: '$specTotal' }
+		}
+	},
+	{
+		$sort: { NbSpectateursTotaux: -1 }
+	}
+];
+
+db.fait_activites.aggregate(query);
+
+```
 
   - requetes4.js
   
 Cette requête est une généralisation de la précédente, on veut avoir une analyse sur toute la France et non sur un seul département, ici on ne fait plus le filtrage par rapport au département et on peut faire une analyse sur un top 10 des événements sportifs qui ont rassemblé le plus de spectateur sur toute la France. Si on veut savoir qu’elles sont les installations les plus fréquentées dans la France lors de l'été 2015 ou de n'importe quelle autre période de temps entre 2005 et 2017.
 
+```javascript
+
+var N = 10;
+
+var query = [
+	{
+		$project: {
+			nomActivite: '$libAct',
+			nomIns: '$installation.nomInst',
+			codeDep: '$installation.codeDep',
+			month: '$date.month',
+			year: '$date.year',
+			specTotal: {
+				$sum: ['$nbSpectateursHomme', '$nbSpectateursHomme']
+			}
+		}
+	},
+	{
+		$match: {
+			$and: [
+				{
+					month: {
+						$gte: 5,
+						$lte: 10
+					}
+				},
+				{
+					year: {
+						$gte: 2005,
+						$lte: 2017
+					}
+				}
+			]
+		}
+	},
+	{
+		$group: {
+			_id: {
+				nomActivite: '$nomActivite',
+				nomInstallation: '$nomIns',
+				codeDep: '$codeDep'
+			},
+			NbSpectateursTotaux: {
+				$sum: '$specTotal'
+			}
+		}
+	},
+	{
+		$sort: {
+			NbSpectateursTotaux: -1
+		}
+	},
+	{
+		$limit: N
+	}
+];
+
+db.fait_activites.aggregate(query);
+
+```
+
   - requete5.js
   
  Cette requête nous donne le nombre total d'évènement sportif par département. Cette requête peut nous renseigner sur les départements qui pratiquent le plus de sport et ceux qui en pratique le moins. Elle peut aider l’état à prendre des décisions comme par exemple dans quel département faire des campagnes pour les bien faits du sport. 
   
+```javascript
+var mapNbActDep = function() {
+	var equipement = this.equipement;
+	if (equipement) {
+		emit({ libDep: equipement.libDep }, { nbActivite: 1 });
+		emit(null, { nbActivite: 1 });
+	}
+};
+
+var reduceNbActDep = function(keyInst, values) {
+	var count = 0;
+	values.forEach(function(value) {
+		count += value.nbActivite;
+	});
+	return { nbActivite: count };
+};
+
+var query = {};
+
+db.fait_activites.mapReduce(mapNbActDep, reduceNbActDep, {
+	out: { inline: 1 },
+	query: query
+});
+
+db.statNbActDep.find().forEach(printjson);
+```
 
 Visualisation de notre entrepôt de données avec NodeJS et React
 ===============================================================
