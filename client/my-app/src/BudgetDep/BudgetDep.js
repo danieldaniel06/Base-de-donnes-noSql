@@ -171,7 +171,7 @@ class BudgetDep extends React.Component {
 			return (
 				<div className="col-md-4">
 					<h3>
-						{object.dep}
+						Eévolution du budget/coût des activités par année du département {object.dep}
 					</h3>
 					<Bar data={object.data} options={options} />
 				</div>

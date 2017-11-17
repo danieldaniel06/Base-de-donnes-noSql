@@ -6,14 +6,15 @@ Pré-requis
 - Avoir nodejs sur sa machine
 - Avoir mongodb sur sa machine
 - Avoir la commande mongo accéssible directement en ligne de commande, pour tester : mongo --version
-- Avoir commande npm accéssible directement en ligne de commande, pour tester : npm --version
+- Avoir la commande npm accéssible directement en ligne de commande, pour tester : npm --version
 
 Installation
 ============
   
-- Faire un clone du projet avec la commmande git.
+- Faire un clone du projet avec la commmande : 
+  - git clone https://github.com/danieldaniel06/Base-de-donnes-noSql.git
 - Avec le terminal, placer vous dans le dossier qui vient d'être cloner et lancer la commande make.
-- Une fois les deux processus précédentes terminés vous devez avoir sur le terminal :
+- Une fois terminé vous devez avoir sur le terminal :
     - Running on port 3001... we're connected!
 - Ouvrir un autre terminal sur le repertoir courant et placez vous dans le dossier client/build avec la commande : cd client/build
     - Executer make
@@ -41,8 +42,8 @@ Sommaire
 - Introduction    
 - Description des données sources    
 - Extraction, Nettoyage et Transformation des données avec Talend    
-- Stockage des données avec MongoDB    
-- Agrégation des données avec JavaScript    
+- Agrégation des données avec JavaScript   
+- Stockage des données avec MongoDB     
 - Requêtes    
 - Visualisation de notre entrepôt de données avec NodeJS et React    
 - Annexe
@@ -52,72 +53,80 @@ Introduction
 
 L'objectif de ce projet était de réaliser un entrepôt de données, c'est-à-dire une structure qui a pour but, contrairement aux bases de données “classique”, de regrouper les données d'une entreprise pour des fins analytiques et pour l'aide à la décision stratégique, action entreprise par les décideurs de l'entreprise qui vise à améliorer, quantitativement ou qualitativement, la performance de l'entreprise. C'est un puissant outil d'aide à la décision. 
 
-Pour ce projet on a choisi de se mettre à la place d’une organisation qui aide l'etat à gérer sont budget pour tout ce qui concerne le sport en France, les activités sportives, les installations, les équipements.
+Pour ce projet on a choisi de se mettre à la place d’une organisation qui aide l'état à gérer son budget pour tout ce qui concerne le sport en France, les activités sportives, les installations, les équipements.
 
-Pour trouver des information relatives aux installations sportives dans toute la France nous sommes aller sur le site du gouvernement et nous avons sélectionné trois jeux de données qui vont nous servir à faire notre entrepôt de données. Nous allons tout d’abord décrire nos jeux de données puis expliquer comment on a fait pour construire cet entrepôt avec les outils utilisés.
+Pour trouver des informations relatives aux installations sportives dans toute la France nous sommes allés sur le site du gouvernement et nous avons sélectionné trois jeux de données qui vont nous servir à faire notre entrepôt de données. Nous allons tout d’abord décrire nos jeux de données puis expliquer comment on a fait pour construire cet entrepôt avec les outils utilisés.
 
 Description des données sources
 ===============================
 
-Sur le site du gouvernement nous avons trouvé un recensement national de l’intégralité des équipements sportifs, espaces et sites de pratiques.
-Nous avons choisi trois fichiers qui nous apportait les informations nécessaires à la création de notre entrepôt de données.
+Sur le site du gouvernement nous avons trouvé un recensement national de l’intégralité des équipements sportifs, espaces et sites de pratiques. Nous avons choisi trois fichiers qui nous apportaient les informations nécessaires à la création de notre entrepôt de données.
 
 La fiche “installations” nous donne toute sortes d’informations sur l’installation sportive comme son nom, son adresse complète, le nombre d'équipements qu’il y a, si il y a un gardien etc...
 
-La fiche “équipements” nous donne des informations sur les équipements sportifs comme son nom, l’installation dans lequel on le trouve, sa matière, sa date de création etc..
+La fiche “installations” nous donne toutes sortes d’informations sur l’installation sportive comme son nom, son adresse complète, le nombre d'équipements qu’il y a, s'il y a un gardien etc.
 
-La fiche “activités des fiches équipements” nous donne des informations sur les activités, leur noms, le niveau, la nature de l’activité si elle est scolaire. 
+La fiche “activités des fiches équipements” nous donne des informations sur les activités, leurs noms, le niveau, la nature de l’activité si elle est scolaire.
 
-Cette dernière fiche recense les “événement sportif qui ont eu lieux dans les installations” mais pas avec beaucoup de détails comme le nombres de spectateurs, le nombres de participants, le budget alloué, le coût actuel de l'événement. Ses données étaient introuvables et pourtant elles étaient importante pour nous permettre de faire des analyses pertinente alors nous avons dû les créer nous même, ce qui sera expliquer un peu plus tard.
+Cette dernière fiche recense les évènements sportifs qui ont eu lieu dans des équipements qui se trouve (oui/non) dans des installations mais pas avec beaucoup de détails comme le nombre de spectateurs, le nombre de participants, le budget alloué, le coût actuel de l'événement. Ses données étaient introuvables et pourtant elles étaient importantes pour nous permettre de faire des analyses pertinentes alors nous avons dû les créer nous-même, ce qui sera expliquer un peu plus tard.
 
 Extraction, Nettoyage et Transformation des données avec Talend
 ===============================================================
 
-Pour “préparer” nos données nous avons utilisé le logiciel d'intégration de donnée Talend il est relativement simple et intuitif et grâce à lui nous avons pus mettre en entrée nos fichiers CSV et pouvoir choisir les données à extraire. Grâce à un mapping nous avons extrait les données puis nous avons changer les noms et les types de ses données pour leur donner des noms plus cohérent et plus précis. Nous avons ensuite choisi de mettre nos données dans un fichier en format JSON à la sortie. Le format JSON est assez facile à comprendre et les types de données qu'il a sont utilisées dans beaucoup de langage ce qui rendais sa manipulation beaucoup plus simple pour la suite du projet. Ce format nous était surtout très utile pour pouvoir importer nos données dans MongoDB.
+Pour “préparer” nos données nous avons utilisé le logiciel d'intégration de données Talend, il est relativement simple et intuitif et grâce à lui nous avons pu mettre en entrée nos fichiers CSV et pouvoir choisir les données à extraire. Grâce à un mapping nous avons extrait les données puis nous avons changé les noms et les types de ses données pour leur donner des noms plus cohérents et plus précis. Nous avons ensuite choisi de mettre nos données dans un fichier en format JSON à la sortie. Le format JSON est assez facile à comprendre et les types de données qu'il a sont utilisées dans beaucoup de langages ce qui rendait sa manipulation beaucoup plus simple pour la suite du projet. Ce format nous était surtout très utile pour pouvoir importer nos données dans MongoDb.
 
-Suite à cette étape d'extraction et de nettoyage nous avons quatres fichiers JSON qui vont être nos dimensions quand nous allons vouloir faire nos requêtes : Équipements, Installations, Date et Niveau.
+Suite à cette étape d'extraction et de nettoyage nous avons quatre fichiers JSON qui vont être nos dimensions quand nous allons vouloir faire nos requêtes : Équipements, Installations, Date et Niveau.
 
-Nous avons créé pour la dimension Date un fichier JSON qui contient les dates de tous les jours du 28/07/2005 au 28/07/2017 cette table vas nous servir lorsque nous allons créer notre table de fait et pour faire des analyses par rapport à des périodes de temps.
+Nous avons créé pour la dimension Date un fichier JSON qui contient les dates de tous les jours du 28/07/2005 au 28/07/2017 cette table va nous servir lorsque nous allons créer notre table de fait et pour faire des analyses par rapport à des périodes de temps.
 
 Voici une image pour illustrer ce processus d'extraction de nettoyage et de transformation avec Talend :
 
 ![alt tag](https://user-images.githubusercontent.com/16761554/32853119-8e302bf0-ca3a-11e7-942c-c8ba1465b943.png)
 
 
-Stockage des données avec MongoDB
-=================================
+![alt tag](https://user-images.githubusercontent.com/11199130/32940417-e512d7c6-cb82-11e7-9c72-e9648e257e78.png)
 
-Pour stocker notre entrepôts de données nous avons choisi d’utiliser la technologie MongoDB. MongoDB est une base de données NoSQL, nous avons choisit de l’utiliser car c'est une technologie simple d’utilisation, qui propose un modèle de donnée flexible, qui a été conçu pour la performance et la disponibilité et que nous voulions faire quelque chose de performant. De plus MongoDB implémente le Map Reduce qui vas être utile pour nos requêtes.
+Comme nous n’avions pas assez d’informations sur les événements sportifs qui ont eu lieu dans les installations il a fallu ajouter ses informations nous-même, des informations comme le nombre de participants à cet événement, le nombre de spectateurs qui sont allé voir cet événement, le budget alloué pour l'événement, le coût de l’événement etc.
 
-Après avoir créé notre tables de fait grâce à JavaScript nous l’avons importé dans une collection dans une base de donnée de MongoDB grâce à la commande mongoimport qui nous permet d’importer un fichier JSON en une collection dans MongoDB, ensuite il ne nous restait plus qu’à faire des requêtes sur cette collection de Fait.
+![alt tag](https://user-images.githubusercontent.com/11199130/32940669-99f54eb2-cb83-11e7-98fb-7ca146d2fe7d.png)
 
 Agrégation des données avec JavaScript
 ======================================
 
-Comme nous n’avions pas assez d’informations sur les événements sportifs qui ont eu lieux dans les installations il a fallu ajouter ses informations nous même, des informations comme le nombres de participants à cet événement, le nombre de spectateurs qui sont aller voir cet événement, le budget alloué pour l'événement, le coût de l’événement …
+Comme nous voulons des événements historisés, nous avons généré un document date qui contient toutes les dates de 2005 jusqu'en 2017. Le choix de ces dates nous semble pertinent car elles sont cohérentes avec nos jeux de données puisque le recensement a commencé depuis 2005.
 
-Grâce à un script JavaScript nous avons mis en relations ses données avec nos autres tables pour donner plus d’informations sur l'évènement sportif: l'activité pratiqué, la date et l’installation dans laquelle a eu lieux cet événement.
-En combinant ses informations avec les faits numériques qu'on a rajouté on peut créer une ligne de notre table de fait.
+Grâce à un script Javascript nous avons mis en relation ces données avec nos autres tables pour donner plus d’informations sur l'évènement sportif: l'activité pratiquée, la date et l’installation dans laquelle a eu lieu cet événement.
+En combinant ses informations avec les faits numériques qu'on a rajoutés on peut créer une ligne de notre table de fait.
 
-Le processus d’entreprise qu’on a choisi de modéliser est : La gestion des événements sportifs  en france.
-On peut étudier des phénomène comme la fréquentation d’une installation qui se traduit par les activités qu’il y a eu dans une installations et par le nombre de personnes qui sont venu y participer ou la regarder. On peux aussi regarder à quelle fréquence ont lieux ces événements sportifs et surtout où ont ils lieux, on peut regarder comment est repartis le budget pour les événements sportifs un peu partout et voir si il est utile ou pas de le redistribuer autrement, grâce à ça l'Etat peut faire des analyses de ce genre pour prendre une décision importante.
+Le processus d’entreprise qu’on a choisi de modéliser est :
+- la gestion des événements sportifs en France.
 
-Une ligne de notre table de fait représente donc un événement sportif, on a des informations comme la date, l’activité pratiqué, l’installation utilisé, le nombre de participant homme,femme, le nombre de spectateur homme, femme, le budget, le coût. C’est le grain du processus que nous avons décidé de prendre.
+On peut étudier des phénomènes comme la fréquentation d’une installation qui se traduit par les activités qu’il y a eu dans une installation et par le nombre de personnes qui sont venu y participer ou la regarder. On peut aussi regarder à quelle fréquence a lieu ces événements sportifs et surtout où ont-ils lieux, on peut regarder comment est repartis le budget pour les événements sportifs un peu partout et voir s'il est utile ou pas de le redistribuer autrement, grâce à ça l'État peut faire des analyses de ce genre pour prendre une décision importante.
 
-Les dimensions que nous utilisons sont: Installations, Équipement, Date. 
+Une ligne de notre table de fait représenter donc un événement sportif, on a des informations comme la date, l'activité pratiquée, l'installation utilisée, le nombre de participants hommes, femme, le nombre de spectateurs homme, femme, le budget, le coût. C’est le ***grain du processus*** que nous avons décidé de prendre.
+
+Les dimensions que nous utilisons sont: Installations, Équipement, Date et Niveau. 
 Les faits numériques qui renseigne notre table de fait sont le nombre de spectateurs, le nombre de participants, le coût d’un événement sportif et le budget prévus pour cet événement.
 
-![alt tag](https://user-images.githubusercontent.com/16761554/32834842-4ff89538-ca04-11e7-8d76-a48fac7cd451.png)
+![alt tag](https://user-images.githubusercontent.com/11199130/32941497-46cef456-cb86-11e7-9775-f6455bf51540.png)
 
-Nous obtenons le schéma ci-dessus.
+***Nous obtenons le schéma ci-dessus.***
 
-Sur mongodb, il y a deux manière de représenter un document “Embedded Documents” qui consiste à tout mettre dans un seul document ou “Database References” qui consiste a faire une séparation des tables en utilisant leurs clé pour les référencer comme dans les bases de données relationnelle. Nous avons choisis “Embedded Document” pour une question de performance car il n'y pas besoin de faire une jointure entre deux document, elle est déjà faite en quelque sorte grâce à la façon dont nous avons construit notre table de faits.
+Sur mongodb, il y a deux manières de représenter un document “Embedded Documents” qui consiste à tout mettre dans un seul document ou “Database Références” qui consiste à faire une séparation des tables en utilisant leurs clés pour les référencer comme dans les bases de données relationnelles. Nous avons choisi “Embedded Document” pour une question de performance car il n'y a pas besoin de faire une jointure entre deux documents, elle est déjà faite en quelque sorte grâce à la façon dont nous avons construit notre table de faits.
 
-La table de fait généré comporte : 383 723 documents.
+La table de fait généré comporte : ***383 723*** documents.
 
-Un exemple d'un document dans notre table de fait :
+***Un exemple d'un document dans notre table de fait :***
 
 ![alt tag](https://user-images.githubusercontent.com/16761554/32835132-437ad158-ca05-11e7-9f0b-b8a31b615d53.png)
+
+Stockage des données avec MongoDB
+=================================
+
+Pour stocker notre entrepôt de données nous avons choisi d’utiliser la technologie MongoDB. MongoDB est une base de données NoSQL, nous avons choisi de l’utiliser car c'est une technologie simple d’utilisation, qui propose un modèle de données flexibles, qui a été conçu pour la performance et la disponibilité et que nous voulions faire quelque chose de performant. De plus MongoDB implémente le Map Reduce qui va être utile pour nos requêtes.
+
+Après avoir créé notre table de fait grâce à JavaScript nous l’avons importé dans une collection dans une base de données de MongoDB grâce à la commande mongoimport qui nous permet d’importer un fichier JSON en une collection dans MongoDB, ensuite il ne nous restait plus qu’à faire des requêtes sur cette collection de Fait.
+
 
 Requêtes
 ========
@@ -126,49 +135,55 @@ Les requêtes sont toute dans le fichier "query" du git.
 
   - budget.js 
 
-Cette requête est l'équivalent d’un GROUP BY ROLLUP, à partir de D dimensions nous obtenons D+1 niveaux d'agrégation, pour cette requête nos dimensions sont Departement, Date, et Niveau, l'information relative au niveau est dans le document de fait et celle relative au département est dans le document Equipement. 
+Cette requête est l'équivalent d’un GROUP BY ROLLUP, à partir de D dimensions nous obtenons D+1 niveau d'agrégation, pour cette requête nos dimensions sont : 
+- Département, Date, et Niveau
 
-Nous obtenons quatres niveaux d'agrégats: le département, l'année, le niveau de l'événement et budget total. Cette requête permet de savoir le budget dépensé par année pour chaque département pour l'organisation des événements sportifs a tout niveau. On peut augmenter la granularité en effectuant un slice, de cette façon on peut avoir cette information que pour les activités de niveau "Scolaire" par exemple.
+L'information relative au niveau est dans le document de fait et celle relative au département est dans le document Équipement.
+
+Nous obtenons quatre niveaux d'agrégats: le département, l'année, le niveau de l'événement et budget total. Cette requête permet de savoir le budget dépensé par année pour chaque département pour l'organisation des événements sportifs à tout niveau. On peut augmenter la granularité en effectuant un slice, de cette façon on peut avoir cette information que pour les activités de niveau "Scolaire" par exemple.
 
   - budgetCom
 
-Cette requête présente la même logique que la précédente, mais ici nous avons éffectué un drill-down qui nous permet d'avoir plus de détail sur la répartition des budgets non plus par département mais par commune.
+Cette requête présente la même logique que la précédente, mais ici nous avons effectué un drill down qui nous permet d'avoir plus de détails sur la répartition des budgets non plus par département mais par commune.
   
   - budgetAgg
 
-Ici nous avons repris les deux requettes précédentes en utilisant l'opérateur agréggate. Le but étant des faire des tests de perfomance comme on à un jeux de données assez importante. En effet dans notre table de fait, nous avons 383 723 documents dont chaque document représente une ligne de notre table de fait sous la forme d'agrégat.
+Ici nous avons repris les deux requêtes précédentes en utilisant l'opérateur agrégat. Le but était de faire des tests de performance comme on a un jeu de données assez importantes. En effet dans notre table de fait, nous avons 383 723 documents dont chaque document représente une ligne de notre table de fait sous la forme d'agrégat.
   
   - requetes1.js
   
-Cette requête est l'équivalent d’un GROUP BY CUBE, à partir de D dimensions nous obtenons 2^D niveaux d'agrégation. En partant des dimensions Date et Installation nous obtenons quatres niveaux d'agrégats.
+Cette requête est l'équivalent d’un GROUP BY CUBE, à partir de D dimensions nous obtenons 2^D niveaux d'agrégation. En partant des dimensions Date et Installation nous obtenons quatre niveaux d'agrégats.
 
-Ici selon l’activité et l’installation nous cherchons a avoir des informations sur les participants, leur nombres et leur profil, si c'est des hommes, des femmes etc...
-
-Cette requête peut aider à savoir comment adapter les installations par rapport aux personnes qui la fréquente par exemple.
+Ici selon l’activité et l’installation nous cherchons à avoir des informations sur les participants, leur nombre et leur profil, si c'est des hommes, des femmes etc.
+Cette requête peut aider à savoir comment adapter les installations par rapport aux personnes qui la fréquentent par exemple.
 
   - requete2.js
   
-Cette requête est la même que la précédente. MongoDB nous donne deux façons de faire cette requête une en utilisant d’enorme suite de query pour faire un groupage ou une plus sobre qui passe par l’utilisation d’un MapReduce, nous avons pu observer une différence de performance.
+Cette requête est la même que la précédente. MongoDB nous donne deux façons de faire cette requête une en utilisant d’énormes suites de query pour faire un groupage ou une plus sobre qui passe par l’utilisation d’un Map Reduce, nous avons pu observer une différence de performance.
 
-Map traverse tous les documents de notre table de fait et va pousser des informations à reduce selon une clé définie cette opération mets plus de temps que la première version de cette requête. 
+Map traverse tous les documents de notre table de fait et va pousser des informations à reduce selon une clé définit cette opération met plus de temps que la première version de cette requête.
 
   - requetes3.js
   
-Nous avons fait une requête qui nous donne les activités qui attire le plus de spectateurs en les filtrant par département et sur une période de temps, on fait un groupage par activité par date et par département. Nous pouvons voir par exemple lors de l’été 2015 c'est à dire de Juin à Septembre 2015, quelles sont les activités qui ont eu le plus de spectateur à Nantes et dans quelles installations. Cette requête est intéressante pour choisir par exemple quelles activités mettre en avant au fil des saisons et savoir quelle sont les installations où les gens vont le plus et ainsi décider de les améliorer, et mieux répartir le budget entre les installations du département.
+Nous avons fait une requête qui nous donne les activités qui attirent le plus de spectateurs en les filtrant par département et sur une période de temps, on fait un groupage par activité par date et par département. Nous pouvons voir par exemple lors de l’été 2015 c'est-à-dire de Juin à septembre 2015, quelles sont les activités qui ont eu le plus de spectateur à Nantes et dans quelles installations. Cette requête est intéressante pour choisir par exemple quelles activités mettre en avant au fil des saisons et savoir quelle est les installations où les gens vont le plus et ainsi décider de les améliorer, et mieux répartir le budget entre les installations du département.
 
   - requetes4.js
   
-Cette requête est une généralisation de la précédente, on veut avoir une analyse sur toute la France et non sur un seul département, ici on ne fait plus le filtrage par rapport au département et on peux faire une analyse sur un top 10 des événements sportifs qui ont rassemblés le plus de spectateur sur toute la France. Si on veut savoir qu’elle sont les installations les plus fréquentés dans la France lors de l'été 2015 ou de n'importe quelle autre période de temps entre 2005 et 2017.
+Cette requête est une généralisation de la précédente, on veut avoir une analyse sur toute la France et non sur un seul département, ici on ne fait plus le filtrage par rapport au département et on peut faire une analyse sur un top 10 des événements sportifs qui ont rassemblé le plus de spectateur sur toute la France. Si on veut savoir qu’elles sont les installations les plus fréquentées dans la France lors de l'été 2015 ou de n'importe quelle autre période de temps entre 2005 et 2017.
 
   - requete5.js
   
- Cette requête nous donne le nombre total d'évènement sportif par département. Cette requête peut nous renseigner sur les département qui pratique le plus de sport et ceux qui en pratique le moins. Elle peut aider l’etat à prendre des décisions comme par exemple dans quel département faire des campagnes pour les bien fait du sport. 
+ Cette requête nous donne le nombre total d'évènement sportif par département. Cette requête peut nous renseigner sur les départements qui pratiquent le plus de sport et ceux qui en pratique le moins. Elle peut aider l’état à prendre des décisions comme par exemple dans quel département faire des campagnes pour les bien faits du sport. 
   
 
 Visualisation de notre entrepôt de données avec NodeJS et React
 ===============================================================
 
-Grâce à NodeJS, React et MongoDB nous avons pu générer une application web qui nous fournis un rendus html de notre entrepôt de donnée et des résultats de nos requêtes, les résultats sont ainsi plus agréable à parcourir, et sont mieux adapter a de l'analyse. 
+Grâce à Node Js, React et MongoDB nous avons pu générer une application web qui nous fournis un rendu HTML de notre entrepôt de données et des résultats de nos requêtes, les résultats sont ainsi plus agréable à parcourir, et sont mieux adaptés à de l'analyse. 
+
+***Aperçu de ce qu'on peut visualiser***
+
+
 
 Annexe
 ======
