@@ -1,4 +1,4 @@
-# Tutoriel pour lancer l'application
+# Tutoriel pour lancer l'application sur mac et linux
 
 Pré-requis
 ==========
