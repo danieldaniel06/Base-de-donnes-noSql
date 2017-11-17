@@ -5,6 +5,7 @@ Pré-requis
 
 - Avoir nodejs sur sa machine : https://nodejs.org/en/
 - Avoir mongodb sur sa machine : https://www.mongodb.com
+- Avoir php sur sa machine : http://php.net/downloads.php
 - Avoir la commande mongo accéssible directement en ligne de commande, pour tester : mongo --version
 - Avoir la commande npm accéssible directement en ligne de commande, pour tester : npm --version
 
