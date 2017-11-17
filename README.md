@@ -3,8 +3,8 @@
 Pré-requis
 ==========
 
-- Avoir nodejs sur sa machine
-- Avoir mongodb sur sa machine
+- Avoir nodejs sur sa machine : https://nodejs.org/en/
+- Avoir mongodb sur sa machine : https://www.mongodb.com
 - Avoir la commande mongo accéssible directement en ligne de commande, pour tester : mongo --version
 - Avoir la commande npm accéssible directement en ligne de commande, pour tester : npm --version
 
