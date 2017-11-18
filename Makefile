@@ -1,9 +1,9 @@
 jsonDirectory = Files/jsonFiles
 dataBase = data/db
 fileFaitActivite = Files/jsonFiles/fait_activites_w.json
-serviceDirectory = serveur/
+serviceDirectory = api/
 
-serveServeur : importFait
+serveApi : importFait
 	$(MAKE) -C $(serviceDirectory) serve
 
 importFait: unzip serveMongo
