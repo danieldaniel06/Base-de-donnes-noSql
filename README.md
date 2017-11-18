@@ -655,7 +655,10 @@ db.fait_activites.mapReduce(mapNbActDep, reduceNbActDep, {
 Visualisation de notre entrepôt de données avec NodeJS et React
 ===============================================================
 
-Grâce à Node Js, React et MongoDB nous avons pu générer une application web qui nous fournis un rendu HTML de notre entrepôt de données et des résultats de nos requêtes, les résultats sont ainsi plus agréable à parcourir, et sont mieux adaptés à de l'analyse. 
+Grâce à Node Js, React et MongoDB nous avons pu générer une application web qui nous fournis un rendu HTML de notre entrepôt de données et des résultats de nos requêtes, les résultats sont ainsi plus agréable à parcourir, et sont mieux adaptés à de l'analyse.
+
+Avec Node Js, nous avons réalisé un API qu'ont peu utilisé avec n'importe quelle technologie front-end pour faire l'affichage. Pour accéder à la base de données mongo, nous avons utilisé Mongoose (http://mongoosejs.com).
+Pour faire la partie front-end (l'affichage) nous avons utilisé React Js (http://reactjs org).
 
 ***Aperçu de ce qu'on peut visualiser***
 
